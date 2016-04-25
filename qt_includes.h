@@ -24,6 +24,11 @@
 #include <QtGui/QFocusEvent>
 #include <QtGui/QMouseEvent>
 
-#include <QtDesigner/QDesignerExportWidget>
-#include <QtDesigner/QDesignerCustomWidgetInterface>
-
+#include <QtGlobal>
+#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
+    #include <QtUiPlugin/QDesignerExportWidget>
+    #include <QtUiPlugin/QDesignerCustomWidgetInterface>
+#else
+    #include <QtDesigner/QDesignerExportWidget>
+    #include <QtDesigner/QDesignerCustomWidgetInterface>
+#endif
