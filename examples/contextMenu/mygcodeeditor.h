@@ -1,5 +1,5 @@
 /********************************************************************
-* Copyright (C) 2010 - 2016 ArcEye <arceye AT mgware DOT co DOT uk>
+* Copyright (C) 2016 Jakob Flierl <jakob.flierl AT gmail.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -16,25 +16,29 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ********************************************************************/
 
-#ifndef _QGCODE_EDITOR_WIDGET_H
-#define _QGCODE_EDITOR_WIDGET_H
+#ifndef _MY_GCODE_EDITOR_
+#define _MY_GCODE_EDITOR_
 
-#include <QtDesigner>
-#include <qplugin.h>
+#include "QGCodeEditor.h"
 
-class QGCodeEditorWidget : public QObject, public QDesignerCustomWidgetCollectionInterface
+class MyGCodeEditor : public QGCodeEditor
 {
     Q_OBJECT
-    Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetCollectionInterface")
 
 public:
-    explicit QGCodeEditorWidget(QObject *parent = 0);
+    MyGCodeEditor(QWidget *parent = 0);
 
-    virtual QList<QDesignerCustomWidgetInterface*> customWidgets() const;
+Q_SIGNALS:
+    void runFromSelected(int line);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event);
+
+public slots:
+    virtual void onRunFrom();
 
 private:
-    QList<QDesignerCustomWidgetInterface*> m_widget;
+    QAction *actionRunFrom;
 };
 
 #endif
