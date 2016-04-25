@@ -1,6 +1,7 @@
 .qmake.cache
 QGCodeEditor/.moc
 QGCodeEditor/.obj
+QGCodeEditor/Makefile
 
 debian/debhelper-build-stamp
 debian/files
