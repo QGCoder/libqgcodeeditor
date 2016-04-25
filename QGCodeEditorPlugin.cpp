@@ -83,6 +83,6 @@ QString QGCodeEditorPlugin::domXml() const
 
 QString QGCodeEditorPlugin::includeFile() const
 {
-    return QLatin1String("QGCodeEditorPlugin.h");
+    return QLatin1String("QGCodeEditor.h");
 }
 
