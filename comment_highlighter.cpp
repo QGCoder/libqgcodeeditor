@@ -19,7 +19,7 @@
 
 #include <QtGui>
 
-#include "comment_highlighter.h"
+#include "QGCodeEditorPlugin.h"
 
 CommentHighlighter::CommentHighlighter(QTextDocument *parent)
      : QSyntaxHighlighter(parent)
