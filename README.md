@@ -12,12 +12,9 @@ To use clone and build with
 
 `make`
 
-Then copy the `libQGCodeEditor.so` library to your Qt installation under
-
-{QtInstallDir}/plugins/designer
+Then copy the `libQGCodeEditor.so` library to your Qt installation under {QtInstallDir}/plugins/designer
 
 ( with a symlink to /usr/local/lib/libQGCodeEditor.so if your designer plugins are not in your LIBPATH )
-
 
 
 Copy the header `QGCodeEditor.h` to a suitable include directory that is in your include path spec
