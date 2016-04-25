@@ -1,8 +1,8 @@
 CONFIG   += plugin release
-TARGET   = $$qtLibraryTarget(QGCodeEditorWidget)
+TARGET   = $$qtLibraryTarget(QGCodeEditor)
 TEMPLATE = lib
 
-HEADERS  = QGCodeEditorPlugin.h QGCodeEditorWidget.h
+HEADERS  = QGCodeEditor.h QGCodeEditorWidget.h
 
 SOURCES  = QGCodeEditorPlugin.cpp QGCodeEditorWidget.cpp
 		

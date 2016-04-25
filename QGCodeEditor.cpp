@@ -22,7 +22,7 @@
 #include <QtDebug>
 #include <QApplication>
 
-#include "QGCodeEditorPlugin.h"
+#include "QGCodeEditor.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // this class is used within Designer promoted from QPlainTextEdit so that it can be inserted directly and not into another widget

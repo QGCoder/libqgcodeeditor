@@ -17,7 +17,7 @@
 ********************************************************************/
 
 #include "QGCodeEditorWidget.h"
-#include "QGCodeEditorPlugin.h"
+#include "QGCodeEditor.h"
 
 QGCodeEditorWidget::QGCodeEditorWidget(QObject *parent)
     : QObject(parent)
