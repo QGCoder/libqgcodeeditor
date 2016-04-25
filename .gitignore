@@ -23,3 +23,17 @@ debian/libqgcodeeditor.debhelper.log
 debian/libqgcodeeditor.substvars
 debian/libqgcodeeditor/
 debian/tmp/
+
+*.o
+moc_*.cpp
+
+DesignerPlugin/Makefile
+DesignerPlugin/libqgcodeeditorplugin.so
+Makefile
+examples/Makefile
+examples/contextMenu/Makefile
+examples/contextMenu/contextMenu
+examples/contextMenu/ui_mainwindow.h
+examples/simple/Makefile
+examples/simple/simple
+examples/simple/ui_mainwindow.h
