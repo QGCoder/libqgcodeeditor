@@ -2,6 +2,8 @@
 QGCodeEditor/.moc
 QGCodeEditor/.obj
 QGCodeEditor/Makefile
+QGCodeEditor/libQGCodeEditor.prl
+QGCodeEditor/libQGCodeEditor.so*
 
 debian/debhelper-build-stamp
 debian/files
