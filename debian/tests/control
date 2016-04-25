@@ -1,0 +1,2 @@
+Tests: build1
+Depends: libqgcodeeditor-dev, build-essential, xvfb, xauth

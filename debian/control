@@ -1,0 +1,97 @@
+Source: libgcodeeditor
+Uploaders: Jakob Flierl <jakob.flierl@gmail.com>
+Section: libs
+Testsuite: autopkgtest
+Priority: optional
+Build-Depends: debhelper (>= 9),
+               qtbase5-dev,
+               qtbase5-dev-tools,
+               libqt4-dev (>= 4:4.8.0~)
+Standards-Version: 3.9.6
+Vcs-Browser: https://github.com/ArcEye/QGCodeEditor.git
+Vcs-Git: https://github.com/ArcEye/QGCodeEditor.git
+Homepage: https://github.com/ArcEye/QGCodeEditor
+
+Package: libgcodeeditor-dev
+Architecture: any
+Section: libdevel
+Depends: libgcodeeditor (= ${binary:Version}),
+         qtbase5-dev,
+         qtbase5-dev-tools,
+         libx11-dev,
+         libxext-dev,
+         libxmu-dev,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: G-Code text editor library based on Qt5 - development files
+ libgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the files needed to develop and compile programs
+ using QGCodeEditor linked with Qt version 5.
+
+Package: libgcodeeditor-doc
+Architecture: all
+Section: doc
+Depends: libjs-jquery,
+         ${misc:Depends}
+Description: G-Code text editor library based on Qt5 - development files
+ libgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains documentation and examples.
+
+Package: libgcodeeditor
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: G-Code text editor library based on Qt5 - development files
+ libgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the shared library needed to run programs using
+ QGCodeEditor. This package contains QGCodeEditor linked with Qt version 5.
+
+Package: libgcodeeditor-qt4
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: G-Code text editor library based on Qt5 - development files
+ libgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the shared library needed to run programs using
+ QGCodeEditor. This package contains QGCodeEditor linked with Qt version 4.
+
+Package: libgcodeeditor-dev-qt4
+Architecture: any
+Section: libdevel
+Depends: libgcodeeditor2-qt4 (= ${binary:Version}),
+         libqt4-dev (>= 4:4.8.0~),
+         libqt4-opengl-dev (>= 4:4.8.0~),
+         libx11-dev,
+         libxext-dev,
+         libxmu-dev,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Conflicts: libgcodeeditor-dev
+Description: G-Code text editor library based on Qt5 - development files
+ libgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the files needed to develop and compile programs
+ using QGCodeEditor linked with Qt version 4.

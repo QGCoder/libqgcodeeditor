@@ -13,7 +13,6 @@ cd QGCodeEditor
 qmake PREFIX=/usr
 make
 sudo make install
-
 ```
 To run one of the examples:
 ```

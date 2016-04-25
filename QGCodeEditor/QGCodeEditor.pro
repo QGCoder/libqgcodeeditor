@@ -47,12 +47,12 @@ unix {
         isEmpty( DOC_DIR ) {
                 macx|darwin-g++ {
                         isEmpty( PREFIX ) {
-                                DOC_DIR = $${PWD}/Library/Developer/Shared/Documentation/QGLViewer
+                                DOC_DIR = $${PWD}/Library/Developer/Shared/Documentation/QGCodeEditor
                         } else {
-                                DOC_DIR = $${PREFIX}/Shared/Documentation/QGLViewer
+                                DOC_DIR = $${PREFIX}/Shared/Documentation/QGCodeEditor
                         }
                 } else {
-                        DOC_DIR = $${PREFIX_}/share/doc/QGLViewer
+                        DOC_DIR = $${PREFIX_}/share/doc/QGCodeEditor
                 }
         }
 

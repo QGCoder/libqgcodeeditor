@@ -1,0 +1,55 @@
+#!/bin/sh
+# autopkgtest check: Build and run a program against libmedc
+# (C) 2016 Jakob Flierl <jakob.flierl@gmail.com>
+
+set -e
+
+WORKDIR=$(mktemp -d)
+trap "rm -rf $WORKDIR" 0 INT QUIT ABRT PIPE TERM
+cd $WORKDIR
+cat <<EOF > main.cpp
+#include "simple.h"
+#include <qapplication.h>
+
+int main(int argc, char** argv)
+{
+  // Read command lines arguments.
+  QApplication application(argc,argv);
+
+  GCodeEditor e;
+  e.setWindowTitle("GCodeEditor");
+  e.show();
+
+  // Run main loop.
+  // return application.exec();
+}
+
+EOF
+
+cat <<EOF > simple.h
+#include <QGCodeEditor/QGcodeEditor.h>
+
+class GCodeEditor : public QGCodeEditor
+{
+};
+
+EOF
+
+cat <<EOF > simple.cpp
+#include "simple.h"
+
+using namespace std;
+
+EOF
+
+arch_triplet="$(gcc -print-multiarch)"
+
+g++ -I/usr/include -I/usr/include/${arch_triplet}/qt5 -I/usr/include/${arch_triplet}/qt5/QtWidgets -I/usr/include/${arch_triplet}/qt5/QtGui -I/usr/include/${arch_triplet}/qt5/QtCore -lQt5Widgets -lQt5Xml -lQt5Gui -lQt5Core -lQGCodeEditor -fPIC -o simple simple.cpp main.cpp 
+
+echo "build: OK"
+[ -x simple ]
+touch a
+
+
+#xvfb-run --auth-file=a ./simple
+#echo "run: OK"
