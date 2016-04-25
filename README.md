@@ -20,6 +20,6 @@ Then copy the `libQGCodeEditor.so` library to your Qt installation under
 
 
 
-Copy the header `QGcodeEditor.h` to a suitable include directory that is in your include path spec
+Copy the header `QGCodeEditor.h` to a suitable include directory that is in your include path spec
 
 (suggest your {QtInstallDir}/include)
