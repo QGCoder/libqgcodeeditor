@@ -1,13 +1,12 @@
 # Run "qmake; make; make install" to compile and install the library on Unix systems.
 
 TEMPLATE = lib
-TARGET   = QGCodeEditor
+TARGET = QGCodeEditor
 VERSION  = 0.1.0
 
 QT      *= gui widgets
 
 CONFIG  += qt warn_on shared thread create_prl rtti
-TARGET   = $$qtLibraryTarget(QGCodeEditor)
 
 HEADERS = QGCodeEditor.h   QGCodeSyntaxHighlighter.h
 SOURCES = QGCodeEditor.cpp QGCodeSyntaxHighlighter.cpp
