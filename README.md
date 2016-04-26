@@ -16,8 +16,10 @@ sudo make install
 ```
 To run one of the examples:
 ```
-./examples/simple/simple
-./examples/contextMenu/contextMenu
+cd examples
+make
+simple/simple
+contextMenu/contextMenu
 ```
 
 Or build and install as a Debian package (WIP):
