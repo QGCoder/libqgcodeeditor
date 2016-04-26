@@ -1,0 +1,4 @@
+usr/include
+usr/lib/*/libQGCodeEditor.prl
+usr/lib/*/libQGCodeEditor.so*
+usr/lib/*/qt5/mkspecs/features/*

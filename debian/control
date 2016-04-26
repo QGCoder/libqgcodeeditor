@@ -6,8 +6,7 @@ Testsuite: autopkgtest
 Priority: optional
 Build-Depends: debhelper (>= 9),
                qtbase5-dev,
-               qtbase5-dev-tools,
-               libqt4-dev (>= 4:4.8.0~)
+               qtbase5-dev-tools
 Standards-Version: 3.9.6
 Vcs-Browser: https://github.com/ArcEye/QGCodeEditor.git
 Vcs-Git: https://github.com/ArcEye/QGCodeEditor.git
@@ -60,39 +59,3 @@ Description: G-Code text editor library based on Qt5 - development files
  .
  This package contains the shared library needed to run programs using
  QGCodeEditor. This package contains QGCodeEditor linked with Qt version 5.
-
-Package: libqgcodeeditor-qt4
-Architecture: any
-Multi-Arch: same
-Depends: ${misc:Depends},
-         ${shlibs:Depends}
-Pre-Depends: ${misc:Pre-Depends}
-Description: G-Code text editor library based on Qt5 - development files
- libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
- that enables the quick creation of G-Code editing apps. It features
- G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
- extend to create complex applications, with a possible G-Code editing GUI.
- .
- This package contains the shared library needed to run programs using
- QGCodeEditor. This package contains QGCodeEditor linked with Qt version 4.
-
-Package: libqgcodeeditor-dev-qt4
-Architecture: any
-Section: libdevel
-Depends: libqgcodeeditor2-qt4 (= ${binary:Version}),
-         libqt4-dev (>= 4:4.8.0~),
-         libqt4-opengl-dev (>= 4:4.8.0~),
-         libx11-dev,
-         libxext-dev,
-         libxmu-dev,
-         ${misc:Depends},
-         ${shlibs:Depends}
-Conflicts: libqgcodeeditor-dev
-Description: G-Code text editor library based on Qt5 - development files
- libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
- that enables the quick creation of G-Code editing apps. It features
- G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
- extend to create complex applications, with a possible G-Code editing GUI.
- .
- This package contains the files needed to develop and compile programs
- using QGCodeEditor linked with Qt version 4.

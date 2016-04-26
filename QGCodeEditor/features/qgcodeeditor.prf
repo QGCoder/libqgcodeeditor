@@ -1,0 +1,34 @@
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets printsupport
+
+    greaterThan(QT_MINOR_VERSION, 1) {
+        macx:QT += macextras
+    }
+}
+
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QGCodeEditor
+
+LIBS += -L$$[QT_INSTALL_LIBS]
+
+CONFIG(debug, debug|release) {
+    mac: {
+        LIBS += -lQGCodeEditor_debug
+    } else {
+        win32: {
+            LIBS += -lQGCodeEditor
+        } else {
+            greaterThan(QT_MAJOR_VERSION, 4) {
+                LIBS += -lQGCodeEditor
+            } else {
+                LIBS += -lQGCodeEditor-qt4
+            }
+        }
+    }
+} else {
+    greaterThan(QT_MAJOR_VERSION, 4) {
+        LIBS += -lQGCodeEditor
+        }
+        else {
+	LIBS += -lQGCodeEditor-qt4
+        }
+}
