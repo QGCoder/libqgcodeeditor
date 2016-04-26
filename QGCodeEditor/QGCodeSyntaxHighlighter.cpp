@@ -7,7 +7,7 @@
 QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
-    HighlightingRule rule;
+HighlightingRule rule;
 
     //  The escape sequence \s should denote a space and it says so in the docs
     //  but if you use it you get a 'unrecognised escape char' warning so use \x20 instead
@@ -77,15 +77,15 @@ QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
 void QGCodeSyntaxHighlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightingRule &rule, highlightingRules)
-    {
+	{
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
         while (index >= 0)
-        {
+    	    {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
             index = expression.indexIn(text, index + length);
-        }
-    }
+    	    }
+	}
     setCurrentBlockState(0);
 }
