@@ -24,10 +24,12 @@ simple/simple
 contextMenu/contextMenu
 ```
 
-Or build and install as a Debian package (WIP):
+Or build and install as a Debian package:
 ```
 git clone https://github.com/ArcEye/QGCodeEditor
 cd QGCodeEditor
+sudo apt -y install -qq devscripts equivs lintian qt5-default
+mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
 ```
