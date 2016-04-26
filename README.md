@@ -33,3 +33,9 @@ mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
 ```
+
+## Authors
+
+* [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/ArcEye/qtMDI).
+* [@koppi](https://github.com/koppi) - Debian packaging, travis build automation.
+
