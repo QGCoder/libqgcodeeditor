@@ -17,18 +17,9 @@ CONFIG(debug, debug|release) {
         win32: {
             LIBS += -lQGCodeEditor
         } else {
-            greaterThan(QT_MAJOR_VERSION, 4) {
-                LIBS += -lQGCodeEditor
-            } else {
-                LIBS += -lQGCodeEditor-qt4
-            }
+            LIBS += -lQGCodeEditor
         }
     }
 } else {
-    greaterThan(QT_MAJOR_VERSION, 4) {
-        LIBS += -lQGCodeEditor
-        }
-        else {
-	LIBS += -lQGCodeEditor-qt4
-        }
+    LIBS += -lQGCodeEditor
 }
