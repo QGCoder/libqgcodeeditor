@@ -1,5 +1,7 @@
 # QGCodeEditor
 
+[![Join the chat at https://gitter.im/koppi/QGCodeEditor](https://badges.gitter.im/koppi/QGCodeEditor.svg)](https://gitter.im/koppi/QGCodeEditor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A Qt5 widget for editing G-Code.
 
 Based upon QPlainTextEdit, with added comment and
