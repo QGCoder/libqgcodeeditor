@@ -36,7 +36,7 @@ SOURCES = QGCodeEditorPlugin.cpp QGCodeEditorWidget.cpp
 
 contains( QT_VERSION, "^5.*" ) {
   QT *= designer
-  QT += widgets uiplugin
+  QT += widgets
   CONFIG *= release
   OTHER_FILES += designerplugindescription.json
 } else {
@@ -46,4 +46,8 @@ contains( QT_VERSION, "^5.*" ) {
     HEADERS = qgcodeeditorPlugin.Qt3.h    // as of 2016 Qt3 is deprectated
     SOURCES = qgcodeeditorPlugin.Qt3.cpp  // add these two files for Qt3 if needed
   }
+}
+
+greaterThan(QT_MAJOR_VERSION,4):greaterThan(QT_MINOR_VERSION,4) {
+  QT *= uiplugin
 }
