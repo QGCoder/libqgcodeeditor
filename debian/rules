@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --parallel --sourcedirectory=$(CURDIR)/QGCodeEditor
+
+override_dh_auto_configure:
+	mkdir -p $(CURDIR)/debian/qt4/
+	sed -i -- 's/TARGET = QGCodeEditor/TARGET = QGCodeEditor-qt4/g' QGCodeEditor/QGCodeEditor.pro
+	QT_SELECT=qt4 dh_auto_configure
+	cd QGCodeEditor ; $(MAKE) ; mv libQGCodeEditor-qt4* ../debian/qt4/ ; rm -rf .obj .moc *.prl Makefile
+	rm debian/*.log
+	sed -i -- 's/TARGET = QGCodeEditor-qt4/TARGET = QGCodeEditor/g' QGCodeEditor/QGCodeEditor.pro
+	QT_SELECT=qt5 dh_auto_configure -- LIB_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)
+
+override_dh_auto_install:
+	find . -name '*.vcproj' -print0 | xargs -0 rm -f
+	# now apply privacy cleanning rules
+	find $(CURDIR)/doc/ \
+			 -type f -and -name '*.html' -and -not -empty -print0 \
+			 | xargs -r -0 -n 1 sed -i '/script t/,/script>/d'
+	dh_auto_install
+	mv debian/qt4/* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf $(CURDIR)/debian/qt4

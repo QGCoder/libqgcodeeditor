@@ -16,17 +16,24 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ********************************************************************/
 
-#include "QGCodeEditorWidget.h"
-#include "QGCodeEditor.h"
+#ifndef _QGCODE_EDITOR_WIDGET_H
+#define _QGCODE_EDITOR_WIDGET_H
 
-QGCodeEditorWidget::QGCodeEditorWidget(QObject *parent)
-    : QObject(parent)
+#include <QtDesigner>
+#include <QtPlugin>
+
+class QGCodeEditorWidget : public QObject, public QDesignerCustomWidgetCollectionInterface
 {
-    m_widget.append(new QGCodeEditorPlugin(this));
-}
+    Q_OBJECT
+    Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 
-QList<QDesignerCustomWidgetInterface*> QGCodeEditorWidget::customWidgets() const
-{
-    return m_widget;
-}
+public:
+    explicit QGCodeEditorWidget(QObject *parent = 0);
 
+    virtual QList<QDesignerCustomWidgetInterface*> customWidgets() const Q_DECL_OVERRIDE;
+
+private:
+    QList<QDesignerCustomWidgetInterface*> widget;
+};
+
+#endif

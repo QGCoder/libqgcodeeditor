@@ -1,22 +1,29 @@
 # QGCodeEditor
 
-A Qt5 widget for editing gcode.
+A Qt5 widget for editing G-Code.
 
-Based upon QPlainTextEdit, with added comment and syntax highlighting
+Based upon QPlainTextEdit, with added comment and
+syntax highlighting plus line highlighting for use
+showing currently executing line in a GUI.
 
-plus line highlighting for use showing currently executing line in a GUI.
+To use on Linux / Mac clone and build with:
+```
+git clone https://github.com/ArcEye/QGCodeEditor
+cd QGCodeEditor
+qmake PREFIX=/usr
+make
+sudo make install
+```
+To run one of the examples:
+```
+./examples/simple/simple
+./examples/contextMenu/contextMenu
+```
 
-To use clone and build with
-
-`qmake -makefile`
-
-`make`
-
-Then copy the `libQGCodeEditor.so` library to your Qt installation under {QtInstallDir}/plugins/designer
-
-( with a symlink to /usr/local/lib/libQGCodeEditor.so if your designer plugins are not in your LIBPATH )
-
-
-Copy the header `QGCodeEditor.h` to a suitable include directory that is in your include path spec
-
-(suggest your {QtInstallDir}/include)
+Or build and install as a Debian package (WIP):
+```
+git clone https://github.com/ArcEye/QGCodeEditor
+cd QGCodeEditor
+dpkg-buildpackage -b -rfakeroot -us -uc
+sudo dpkg -i ../libgcodeeditor*deb
+```

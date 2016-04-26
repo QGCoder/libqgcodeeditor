@@ -1,0 +1,9 @@
+Document: libqgcodeeditor-doc
+Title: Debian libQGcodeEditor Manual
+Author: Jakob Flierl <jakob.flierl@gmail.com>
+Abstract: This manual describes what libQGCodeEditor is and how it can be used.
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/libqgcodeeditor-doc/doc/index.html
+Files: /usr/share/doc/libqgcodeeditor-doc/doc/*.html
