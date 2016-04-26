@@ -13,9 +13,9 @@ before_install:
 - dpkg -l | grep qt
 script: debuild --preserve-env --preserve-envvar PATH -i -us -uc -b
 after_success:
-- sudo dpkg -i ../libgcodeeditor*.deb
+- sudo dpkg -i ../libqgcodeeditor*deb
 - sudo apt -y -f install
-- lintian -i ../libgcodeeditor*.dsc
+- lintian -i ../libqgcodeeditor*.dsc
 notifications:
   webhooks:
     urls:
