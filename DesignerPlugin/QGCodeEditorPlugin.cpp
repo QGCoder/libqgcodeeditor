@@ -51,7 +51,7 @@ QGCodeEditorPlugin::QGCodeEditorPlugin(QObject *parent)
   
 QString QGCodeEditorPlugin::includeFile() const
 {
-  return QLatin1String("QGCodeEditor");
+  return QLatin1String("QGCodeEditor.h");
 }
 
 bool QGCodeEditorPlugin::isContainer() const
