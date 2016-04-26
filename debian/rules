@@ -78,7 +78,7 @@ binary: binary-indep binary-arch
 clean:
 	dh_testdir
 	dh_testroot
-	$(MAKE) distclean
+	-$(MAKE) distclean
 	rm -f *-stamp
 	dh_clean
 
