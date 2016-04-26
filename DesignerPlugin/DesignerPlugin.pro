@@ -20,7 +20,7 @@ QT_VERSION=$$[QT_VERSION]
     message(You are using a custom libQGCodeEditor designer plugin installation path.)
     message(Do not forget to add $${PREFIX} to your QT_PLUGIN_PATH variable.)
   }
-} else { # qt3 untested
+} else { # untested
   isEmpty( PREFIX ) {
     PREFIX=$(QTDIR)/plugins
   } else {

@@ -1,3 +1,4 @@
 usr/include
 usr/lib/*/libQGCodeEditor.prl
 usr/lib/*/qt5/mkspecs/features/*
+usr/lib/*/qt5/plugins/designer/*
