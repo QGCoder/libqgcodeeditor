@@ -10,7 +10,7 @@ To use on Linux / Mac clone and build with:
 ```
 git clone https://github.com/ArcEye/QGCodeEditor
 cd QGCodeEditor
-qmake PREFIX=/usr
+qmake
 make
 sudo make install
 ```
