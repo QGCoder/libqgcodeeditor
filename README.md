@@ -25,5 +25,5 @@ Or build and install as a Debian package (WIP):
 git clone https://github.com/ArcEye/QGCodeEditor
 cd QGCodeEditor
 dpkg-buildpackage -b -rfakeroot -us -uc
-sudo dpkg -i ../libgcodeeditor*deb
+sudo dpkg -i ../libqgcodeeditor*deb
 ```
