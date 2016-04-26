@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 EOF
 
 cat <<EOF > simple.h
-#include <QGCodeEditor/QGcodeEditor.h>
+#include <QGCodeEditor/QGCodeEditor.h>
 
 class GCodeEditor : public QGCodeEditor
 {
