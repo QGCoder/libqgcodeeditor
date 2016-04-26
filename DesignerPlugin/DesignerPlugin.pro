@@ -13,6 +13,8 @@ QMAKE_CXXFLAGS_RELEASE -= -g
 
 QT_VERSION=$$[QT_VERSION]
 
+message(Plugins: $$[QT_INSTALL_PLUGINS])
+
 !contains( QT_VERSION, "^3.*" ) {
   isEmpty( PREFIX ) {
     PREFIX=$$[QT_INSTALL_PLUGINS]
