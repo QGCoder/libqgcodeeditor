@@ -1,6 +1,6 @@
 # QGCodeEditor
 
-[![Build Status](https://api.travis-ci.org/koppi/QGCodeEditor.svg?branch=master)](https://travis-ci.org/koppi/GCodeEditor) [![Join the chat at https://gitter.im/koppi/QGCodeEditor](https://badges.gitter.im/koppi/QGCodeEditor.svg)](https://gitter.im/koppi/QGCodeEditor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://api.travis-ci.org/QGCoder/QGCodeEditor.svg?branch=master)](https://travis-ci.org/QGCoder/QGCodeEditor) [![Join the chat at https://gitter.im/QGCoder/QGCodeEditor](https://badges.gitter.im/QGCoder/QGCodeEditor.svg)](https://gitter.im/QGCoder/QGCodeEditor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Qt5 widget for editing G-Code.
 
