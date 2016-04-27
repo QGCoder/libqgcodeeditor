@@ -55,6 +55,16 @@ binary-common:
 	dh_installchangelogs
 	dh_installdocs -A
 	dh_installexamples
+ifeq (,$(findstring -i, $(DH_OPTIONS)))
+	set -e; \
+	for p in libqgcodeeditor \
+	    ; do \
+	    DH_OPTIONS= dh_strip -p$$p --dbg-package=$$p-dbg; \
+	    rm -rf debian/$$p-dbg/usr/share/doc/$$p-dbg; \
+	    mkdir -p debian/$$p-dbg/usr/share/doc; \
+	    ln -s $$p debian/$$p-dbg/usr/share/doc/$$p-dbg; \
+	done
+endif
 	dh_link
 	dh_compress
 	dh_fixperms
