@@ -9,7 +9,7 @@ syntax highlighting plus line highlighting for use
 showing currently executing line in a GUI.
 
 To use on Linux / Mac clone and build with:
-```
+```bash
 git clone https://github.com/ArcEye/QGCodeEditor
 cd QGCodeEditor
 qmake
@@ -17,7 +17,7 @@ make
 sudo make install
 ```
 To run one of the examples:
-```
+```bash
 cd examples
 make
 simple/simple
@@ -25,7 +25,7 @@ contextMenu/contextMenu
 ```
 
 Or build and install as a Debian package:
-```
+```bash
 git clone https://github.com/ArcEye/QGCodeEditor
 cd QGCodeEditor
 sudo apt -y install -qq devscripts equivs lintian qt5-default
