@@ -10,7 +10,7 @@ showing currently executing line in a GUI.
 
 To use on Linux / Mac clone and build with:
 ```bash
-git clone https://github.com/ArcEye/QGCodeEditor
+git clone https://github.com/QGCoder/QGCodeEditor
 cd QGCodeEditor
 qmake
 make
@@ -26,7 +26,7 @@ contextMenu/contextMenu
 
 Or build and install as a Debian package:
 ```bash
-git clone https://github.com/ArcEye/QGCodeEditor
+git clone https://github.com/QGCoder/QGCodeEditor
 cd QGCodeEditor
 sudo apt -y install -qq devscripts equivs lintian qt5-default
 mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
@@ -37,5 +37,5 @@ sudo dpkg -i ../libqgcodeeditor*deb
 ## Authors
 
 * [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/ArcEye/qtMDI).
-* [@koppi](https://github.com/koppi) - Debian packaging, travis build automation.
+* [@koppi](https://github.com/koppi) - Debian packaging, Travis CI.
 
