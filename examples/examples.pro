@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS  = simple contextMenu
+SUBDIRS  = simple contextMenu pipe

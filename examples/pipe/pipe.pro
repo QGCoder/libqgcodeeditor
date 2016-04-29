@@ -1,4 +1,4 @@
-TARGET    = contextMenu
+TARGET    = pipe
 TEMPLATE  = app
 
 QT       += core gui widgets

@@ -1,26 +1,96 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
 
-%:
-	dh $@ --parallel --sourcedirectory=$(CURDIR)/QGCodeEditor
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+#export DPKG_GENSYMBOLS_CHECK_LEVEL=0
 
-override_dh_auto_configure:
-	mkdir -p $(CURDIR)/debian/qt4/
-	sed -i -- 's/TARGET = QGCodeEditor/TARGET = QGCodeEditor-qt4/g' QGCodeEditor/QGCodeEditor.pro
-	QT_SELECT=qt4 dh_auto_configure
-	cd QGCodeEditor ; $(MAKE) ; mv libQGCodeEditor-qt4* ../debian/qt4/ ; rm -rf .obj .moc *.prl Makefile
-	rm debian/*.log
-	sed -i -- 's/TARGET = QGCodeEditor-qt4/TARGET = QGCodeEditor/g' QGCodeEditor/QGCodeEditor.pro
-	QT_SELECT=qt5 dh_auto_configure -- LIB_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)
+CFLAGS = -Wall -g
+CPPFLAGS=
+CXXFLAGS=
+LDFLAGS=
 
-override_dh_auto_install:
-	find . -name '*.vcproj' -print0 | xargs -0 rm -f
-	# now apply privacy cleanning rules
-	find $(CURDIR)/doc/ \
-			 -type f -and -name '*.html' -and -not -empty -print0 \
-			 | xargs -r -0 -n 1 sed -i '/script t/,/script>/d'
-	dh_auto_install
-	mv debian/qt4/* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+        CFLAGS += -O0 -g
+        CXXFLAGS += -O0
+else
+        CFLAGS += $(shell dpkg-buildflags --get CFLAGS)
+        CPPFLAGS += $(shell dpkg-buildflags --get CPPFLAGS)
+        CXXFLAGS += $(shell dpkg-buildflags --get CXXFLAGS)
+        LDFLAGS += $(shell dpkg-buildflags --get LDFLAGS)
+endif
 
-override_dh_auto_clean:
-	dh_auto_clean
-	rm -rf $(CURDIR)/debian/qt4
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+DEB_HOST_ARCH_BITS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_BITS)
+
+configure: configure-stamp
+configure-stamp:
+	QT_SELECT=qt5 qmake QMAKE_STRIP=""
+
+build-library-stamp: configure
+	dh_testdir
+	$(MAKE)
+	touch $@
+
+build: build-arch build-indep
+build-arch: build-library-stamp
+
+build-indep: build-stamp
+build-stamp:
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/tmp DESTDIR=$(CURDIR)/debian/tmp install
+
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installman
+	dh_install --sourcedir=$(CURDIR)/debian/tmp
+	dh_installchangelogs
+	dh_installdocs -A
+	dh_installexamples
+ifeq (,$(findstring -i, $(DH_OPTIONS)))
+	set -e; \
+	for p in libqgcodeeditor \
+	    ; do \
+	    DH_OPTIONS= dh_strip -p$$p --dbg-package=$$p-dbg; \
+	    rm -rf debian/$$p-dbg/usr/share/doc/$$p-dbg; \
+	    mkdir -p debian/$$p-dbg/usr/share/doc; \
+	    ln -s $$p debian/$$p-dbg/usr/share/doc/$$p-dbg; \
+	done
+endif
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture independant packages using the common target.
+binary-indep: install
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: install
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+binary: binary-indep binary-arch
+
+clean:
+	dh_testdir
+	dh_testroot
+	-$(MAKE) distclean
+	rm -f *-stamp
+	dh_clean
+
+.PHONY: build clean binary-indep binary-arch binary install configure
+.NOTPARALLEL:

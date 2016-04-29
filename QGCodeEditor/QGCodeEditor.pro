@@ -31,17 +31,25 @@ unix {
                 PREFIX_=$${PREFIX}
         }
 
-        isEmpty( LIB_DIR ) {
-                LIB_DIR_ = $${PREFIX_}/lib
-        } else {
-                LIB_DIR_ = $${LIB_DIR}
+	isEmpty( LIB_DIR ) {
+                LIB_DIR_ = $$[QT_INSTALL_LIBS]
+	} else {
+		isEmpty( PREFIX ) {
+			LIB_DIR_ = $${LIB_DIR}
+	        } else {
+        	        LIB_DIR_ = $${PREFIX_}/lib
+		}
         }
 
-        isEmpty( INCLUDE_DIR ) {
-                INCLUDE_DIR_ = $${PREFIX_}/include
-        } else {
-                INCLUDE_DIR_ = $${INCLUDE_DIR}
-        }
+	isEmpty( INCLUDE_DIR ) {
+               	INCLUDE_DIR_ = $$[QT_INSTALL_HEADERS]
+	} else {
+		isEmpty( PREFIX ) {
+			INCLUDE_DIR_ = $${INCLUDE_DIR}
+        	} else {
+                	INCLUDE_DIR_ = $${PREFIX_}/include
+	        }
+	}
 
         isEmpty( DOC_DIR ) {
                 macx|darwin-g++ {
@@ -80,8 +88,15 @@ unix {
         # install library
         target.path = $${LIB_DIR_}
 
+	greaterThan(QT_MAJOR_VERSION, 4) {
+    		features.path = $$[QT_HOST_DATA]/mkspecs/features
+	} else {
+		features.path = $$[QT_INSTALL_DATA]/mkspecs/features
+	}
+	features.files = $$PWD/features/qgcodeeditor.prf
+
         # "make install" configuration options
-        INSTALLS *= target include
+        INSTALLS += target include features
 }
 
 # -------------------

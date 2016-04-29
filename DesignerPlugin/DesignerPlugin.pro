@@ -13,6 +13,8 @@ QMAKE_CXXFLAGS_RELEASE -= -g
 
 QT_VERSION=$$[QT_VERSION]
 
+message(Plugins: $$[QT_INSTALL_PLUGINS])
+
 !contains( QT_VERSION, "^3.*" ) {
   isEmpty( PREFIX ) {
     PREFIX=$$[QT_INSTALL_PLUGINS]
@@ -20,7 +22,7 @@ QT_VERSION=$$[QT_VERSION]
     message(You are using a custom libQGCodeEditor designer plugin installation path.)
     message(Do not forget to add $${PREFIX} to your QT_PLUGIN_PATH variable.)
   }
-} else { # qt3 untested
+} else { # untested
   isEmpty( PREFIX ) {
     PREFIX=$(QTDIR)/plugins
   } else {

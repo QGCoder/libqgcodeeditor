@@ -1,6 +1,6 @@
 CONFIG       += ordered
 TEMPLATE      = subdirs
-SUBDIRS       = QGCodeEditor DesignerPlugin examples
+SUBDIRS       = QGCodeEditor DesignerPlugin
 
 QT_VERSION=$$[QT_VERSION]
 
