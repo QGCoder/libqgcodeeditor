@@ -11,11 +11,13 @@ before_install:
 - sudo apt -y install -qq devscripts equivs lintian qt5-default
 - mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 - dpkg -l | grep qt
+- qmake -query
 script: debuild --preserve-env --preserve-envvar PATH -i -us -uc -b
 after_success:
 - sudo dpkg -i ../libqgcodeeditor*deb
 - sudo apt -y -f install
 - lintian -i ../libqgcodeeditor*.dsc
+- for pkg in $(dpkg -l|grep libqgcod | awk '{ print $2 }'); do echo -e "\n## $pkg contains:\n"; dpkg -L $pkg; done
 notifications:
   webhooks:
     urls:
