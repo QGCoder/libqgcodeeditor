@@ -23,8 +23,7 @@
 #include "QGCodeSyntaxHighlighter.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// this class is used within Designer promoted from QPlainTextEdit so that it
-// can be inserted directly and not into another widget
+// this class is used in Designer directly as a  widget
 //
 // New functions:
 // * cursorUp()
@@ -35,7 +34,9 @@
 // Overloaded:
 // * appendNewPlainText(const QString &text)
 // * clear()
-//
+// SubClassed
+// * firstBlockNum() // first block in the viewport
+
 /////////////////////////////////////////////////////////////////////////////
 
 QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
@@ -48,6 +49,8 @@ QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     updateLineNumberAreaWidth(0);
 
+    bMoreBig = bBigFile = false;
+    linesIn = 0;
     QFont font;
     font.setFamily("Courier");
     font.setFixedPitch(true);
@@ -58,27 +61,62 @@ QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     new QGCodeSyntaxHighlighter(document());
 
     highlightCurrentLine();
+
+    excess = new QStringList();
+    contents = new QStringList();
+
 }
 
+QGCodeEditor::~QGCodeEditor()
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // formats first and adds to QStringList before appending 
 // for later comparison using list to test if text changed
+//
+// Need to have editor deal with large inputs, by rendering first
+// chunk then caching rest to prevent GUI lock ups
+//
+// This method has taken a 30 sec load time of a 10000 line file into just
+// the editor, to a 5 sec load into both editor and GL viewer
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void QGCodeEditor::appendNewPlainText(const QString &text)
 {
 QString str;
+QFile file("/tmp/qgc_cache");
 
-    // format the text to space entries if necessary
-    str = formatLine(text);
-    contents << str;
-    QPlainTextEdit::appendPlainText(str);
+    if(!bBigFile)   // not reached 200 lines yet
+        {
+        // format the text to space entries if necessary
+        str = formatLine(text);
+        contents->append(str);
+        QPlainTextEdit::appendPlainText(str);
+        if(++linesIn > CHUNK_SIZE) // when it gets to 201
+            bBigFile = true;
+        }
+    else
+        {
+        str = formatLine(text);
+        excess->append(str);
+        if(!bMoreBig)
+            bMoreBig = true;  // file is 200 lines AND it is cached
+        }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // overloaded to clear the QStringList first
 
 void QGCodeEditor::clear()
 {
-    contents.clear();
+    excess->clear();
+    contents->clear();
     QPlainTextEdit::clear();
+    bBigFile = bMoreBig = false;
+    linesIn = 0;
 }
 
 QString QGCodeEditor::formatLine(QString text)
@@ -138,30 +176,30 @@ QStringList list;
     return str;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 
-// big problem with the base editor was that it registers that document changed
-// and that modification changed (usually by using Ctrl Z or Ctrl Shift Z)
-// but you still could not tell if the document is now different overall or
-// not. By saving a copy of what was loaded and then comparing it to what is
-// present, it reports accurately on any change.
+// big problem with the base editor was that it registers that document changed and that
+// modification changed (usually by using Ctrl Z or Ctrl Shift Z)
+// but you still could not tell if the document is now different overall or not
+// By saving a copy of what was loaded and then comparing it to what is present, it
+// reports accurately on any change.
 
 bool QGCodeEditor::isModified()
 {
-QString txt = toPlainText();
-QStringList list = txt.split( "\n");
-
-    if (contents.size() != list.size())
+    QString txt = toPlainText();
+    QStringList list = txt.split( "\n");
+    
+    if( contents->size() != list.size() )
         return true;
-
-    for (int x = 0; x < contents.size(); x++) 
+    
+    for(int x = 0; x < contents->size(); x++)
         {
-        if( contents[x] != list[x] )
+        if( contents->at(x) != list[x] )
             return true;
         }
-
     return false;
 }
+
 
 QString QGCodeEditor::getCurrentText()
 {
@@ -297,7 +335,46 @@ QColor lineColor = QColor(Qt::yellow).lighter(160);
     extraSelections.append(selection);
 
     setExtraSelections(extraSelections);
+    
+    // This function is triggered by the append actions to the editor
+    // once 200 lines have been appended, begin background 
+    // load of remainder
+    if(bMoreBig)
+        loadNextChunk();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void QGCodeEditor::loadNextChunk()
+{
+int x, y;
+QString str;
+
+    if(bMoreBig)
+        {
+        y = excess->size();
+    if(y > ADD_SIZE) 
+        y = ADD_SIZE;
+
+        for ( x = 0; x < y  ; x++)
+            {
+            str = excess->at(x);
+            str = formatLine(str);
+            contents->append(str);
+            QPlainTextEdit::appendPlainText(str);
+            }
+        // It is quite possible lines could still be being added to the end of the list
+        // whilst reading and removing from front.
+        // This appears safest method of removal, making no size assumptions
+        for( y = 0; y < x && !excess->isEmpty(); y++)
+            excess->removeFirst();
+
+        if(excess->isEmpty())
+            bMoreBig = false;
+        }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void QGCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
