@@ -7,7 +7,7 @@
 QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
-    HighlightingRule rule;
+HighlightingRule rule;
 
     //  The escape sequence \s should denote a space and it says so in the docs
     //  but if you use it you get a 'unrecognised escape char' warning so use \x20 instead
@@ -41,19 +41,19 @@ QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
     rule.pattern = QRegExp("[pPqQ][^\x20 ]*");
     rule.format = PQ_WordFormat;
     highlightingRules.append(rule);
-    
+
     XYZ_WordFormat.setForeground(Qt::black);
     XYZ_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("[xXyYzZaAbBcCuUvVwW][^\x20 ]*");
     rule.format = XYZ_WordFormat;
     highlightingRules.append(rule);
-    
+
     IJKR_WordFormat.setForeground(Qt::darkGray);
     IJKR_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("[iIjJkKrR][^\x20 ]*");
     rule.format = IJKR_WordFormat;
     highlightingRules.append(rule);
-    
+
     Param_WordFormat.setForeground(Qt::darkCyan);
     Param_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("#[^\x20 ]*");
@@ -77,15 +77,15 @@ QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
 void QGCodeSyntaxHighlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightingRule &rule, highlightingRules)
-    {
+        {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
         while (index >= 0)
-        {
+            {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
             index = expression.indexIn(text, index + length);
+            }
         }
-    }
     setCurrentBlockState(0);
 }

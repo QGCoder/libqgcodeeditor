@@ -23,6 +23,8 @@
 #include <QPlainTextEdit>
 #include <QAction>
 #include <QMenu>
+#include <QDebug>
+#include <QTextBlock>
 
 class QPaintEvent;
 class QResizeEvent;
@@ -31,15 +33,25 @@ class QWidget;
 
 class LineNumberArea;
 
+// editor can only judge size by lines, has no concept of file size
+    // render initial 200 lines
+#define CHUNK_SIZE 200
+    // add in 100 lines dynamically
+#define ADD_SIZE 100
+
 class Q_DECL_EXPORT QGCodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
     QGCodeEditor(QWidget *parent = 0);
+    
+    virtual ~QGCodeEditor();
 
     QString getCurrentText();
     QString formatLine(QString);
+
+    int firstBlockNum() const{return ( (int) (QPlainTextEdit::firstVisibleBlock()).blockNumber() );  }
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int  lineNumberAreaWidth();
@@ -49,21 +61,26 @@ public:
     void cursorDown();
     void highlightLine(int);
 
-    bool isModified();
     void appendNewPlainText(const QString &);
     void clear();
-    QStringList contents;
+    bool isModified();
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void highlightCurrentLine();
-    void updateLineNumberArea(const QRect &, int);
+    virtual void updateLineNumberAreaWidth(int newBlockCount);
+    virtual void highlightCurrentLine();
+    virtual void updateLineNumberArea(const QRect &, int);
+    virtual void loadNextChunk();
 
 private:
     QWidget *lineNumberArea;
+    bool bMoreBig, bBigFile;
+    int linesIn;
+    QStringList *excess;
+    QStringList *contents;
+
 };
 
 class LineNumberArea : public QWidget

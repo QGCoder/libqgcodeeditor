@@ -21,7 +21,7 @@
 
 #include <QtGlobal>
 
-#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
+#if QT_VERSION >=  QT_VERSION_CHECK(5, 6, 0)
     #include <QtUiPlugin/QDesignerCustomWidgetInterface>
 #else
     #include <QtDesigner/QDesignerCustomWidgetInterface>

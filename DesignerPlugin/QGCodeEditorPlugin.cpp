@@ -22,7 +22,7 @@
 #include <QtPlugin>
 
 #include <QtGlobal>
-#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     #include <QtUiPlugin/QDesignerExportWidget>
 #else
     #include <QtDesigner/QDesignerExportWidget>
