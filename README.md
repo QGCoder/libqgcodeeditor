@@ -1,12 +1,10 @@
-# QGCodeEditor [![Join the chat at https://gitter.im/QGCoder/QGCodeEditor](https://badges.gitter.im/QGCoder/QGCodeEditor.svg)](https://gitter.im/QGCoder/QGCodeEditor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-A Qt5 designer widget plugin for syntax highlighting and editing gcode.
+A Qt5 designer widget plugin for syntax highlighting and editing [G-code](https://en.wikipedia.org/wiki/G-code):
 
 <img src="https://raw.githubusercontent.com/QGCoder/libqgcodeeditor/master/doc/libqgcodeeditor-designer-widget.png"/>
 
 Based upon [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html), with added comment and syntax highlighting plus line highlighting for use showing currently executing line in a GUI.
 
-To use on Linux/Mac clone and build with:
+To use on Windows/Linux/Mac clone and build with:
 ```bash
 gh repo clone QGCoder/libqgcodeeditor
 cd libqgcodeeditor
@@ -14,6 +12,7 @@ qmake
 make
 sudo make install
 ```
+
 To run one of the examples:
 ```bash
 cd examples
@@ -23,7 +22,11 @@ make
 ./contextMenu/contextMenu
 ```
 
-Or build and install as an Ubuntu/Debian package:
+A benchmark can be found in [examples/pipe/](examples/pipe).
+
+## Ubuntu/Debian packaging
+
+To build and install libqgcodeeditor as an Ubuntu/Debian package, run:
 ```bash
 gh repo clone QGCoder/libqgcodeeditor
 cd libqgcodeeditor
@@ -32,6 +35,8 @@ mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
 ```
+
+-- Tested on Ubuntu 21.10.
 
 ## Authors
 
