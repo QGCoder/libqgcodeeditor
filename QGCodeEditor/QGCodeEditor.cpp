@@ -141,7 +141,7 @@ QStringList list;
         }
     else if(str2.contains(';') )
         {
-        list = str2.split(";", QString::SkipEmptyParts); // skip because could have 2 or more ;
+        list = str2.split(";", Qt::SkipEmptyParts); // skip because could have 2 or more ;
         str = list[0];
         str2 = " ;" + list[1];
         }
@@ -291,7 +291,7 @@ int max = qMax(1, blockCount());
         ++digits;
         }
 
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
     return space;
 }
@@ -353,8 +353,9 @@ QString str;
     if(bMoreBig)
         {
         y = excess->size();
-    if(y > ADD_SIZE) 
+    if(y > ADD_SIZE) {
         y = ADD_SIZE;
+    }
 
         for ( x = 0; x < y  ; x++)
             {
@@ -369,8 +370,9 @@ QString str;
         for( y = 0; y < x && !excess->isEmpty(); y++)
             excess->removeFirst();
 
-        if(excess->isEmpty())
+        if(excess->isEmpty()) {
             bMoreBig = false;
+	}
         }
 }
 

@@ -51,7 +51,10 @@ void MainWindow::onRunFromSelected(int line) {
     QMessageBox msgBox;
 
     QString str;
-    str.sprintf("Run from line %d.", line);
+    QTextStream stream(&str);
+    stream << "Run from line ";
+    stream << line;
+    stream << ".";
 
     msgBox.setText(str);
     msgBox.exec();
