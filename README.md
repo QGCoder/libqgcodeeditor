@@ -36,7 +36,7 @@ dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
 ```
 
--- Tested on Ubuntu 21.10.
+-- Tested on Ubuntu 21.04.
 
 ## Authors
 
