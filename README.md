@@ -2,6 +2,8 @@
 
 A Qt5 widget plugin for editing gcode.
 
+<img src="https://raw.githubusercontent.com/QGCoder/libqgcodeeditor/master/doc/libqgcodeeditor-designer-widget.png"/>
+
 Based upon QPlainTextEdit, with added comment and
 syntax highlighting plus line highlighting for use
 showing currently executing line in a GUI.
