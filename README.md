@@ -19,6 +19,7 @@ sudo make install
 To run one of the examples:
 ```bash
 cd examples
+qmake
 make
 simple/simple
 contextMenu/contextMenu
