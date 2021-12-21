@@ -1,10 +1,10 @@
-To benchmark to QGCodeEditor widget with a ```gcode.ngc``` G-Code file, run:
+To benchmark to QGCodeEditor widget with a ```gcode.ngc``` gcode file, run:
 
 ```bash
 $ time -p bash -c '< gcode.ngc  | ./pipe '
 ```
 
-Example: measure runtime of QGCodeEditor widget with a 1000 lines G-Code file:
+Example: measure runtime of QGCodeEditor widget with a 1000 lines gcode file:
 
 ```bash
 $ time -p bash -c 'cat <(./ngc-urandom.sh 1000) | ./pipe '
