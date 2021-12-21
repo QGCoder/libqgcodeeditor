@@ -1,12 +1,10 @@
 # QGCodeEditor [![Join the chat at https://gitter.im/QGCoder/QGCodeEditor](https://badges.gitter.im/QGCoder/QGCodeEditor.svg)](https://gitter.im/QGCoder/QGCodeEditor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A Qt5 widget plugin for editing gcode.
+A Qt5 designer widget plugin for syntax highlighting and editing gcode.
 
 <img src="https://raw.githubusercontent.com/QGCoder/libqgcodeeditor/master/doc/libqgcodeeditor-designer-widget.png"/>
 
-Based upon QPlainTextEdit, with added comment and
-syntax highlighting plus line highlighting for use
-showing currently executing line in a GUI.
+Based upon [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html), with added comment and syntax highlighting plus line highlighting for use showing currently executing line in a GUI.
 
 To use on Linux/Mac clone and build with:
 ```bash
@@ -25,7 +23,7 @@ make
 ./contextMenu/contextMenu
 ```
 
-Or build and install as a Debian package:
+Or build and install as an Ubuntu/Debian package:
 ```bash
 gh repo clone QGCoder/libqgcodeeditor
 cd libqgcodeeditor
