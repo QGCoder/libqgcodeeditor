@@ -46,3 +46,17 @@ DesignerPlugin/moc_predefs.h
 examples/contextMenu/moc_predefs.h
 examples/pipe/moc_predefs.h
 examples/simple/moc_predefs.h
+
+build-library-stamp
+debian/libqgcodeeditor-dbg.debhelper.log
+debian/libqgcodeeditor-dbg.substvars
+debian/libqgcodeeditor-dbg/
+debian/libqgcodeeditor-designer-dbg.debhelper.log
+debian/libqgcodeeditor-designer-dbg.substvars
+debian/libqgcodeeditor-designer-dbg/
+debian/libqgcodeeditor-designer.debhelper.log
+debian/libqgcodeeditor-designer.substvars
+debian/libqgcodeeditor-designer/
+libqgcodeeditor-build-deps_0.1.0-2_all.deb
+libqgcodeeditor-build-deps_0.1.0-2_amd64.buildinfo
+libqgcodeeditor-build-deps_0.1.0-2_amd64.changes
