@@ -1,0 +1,26 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and install QGCoder/libqgcodeeditor
+      run: |
+          mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
+          git clone --depth 1 https://github.com/QGCoder/libqgcodeeditor
+          cd libqgcodeeditor
+          mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
+          dpkg -l | grep qt
+          debuild --preserve-env --preserve-envvar PATH -i -us -uc -b
+          sudo dpkg -i ../libqgcodeeditor*deb
+          sudo apt -y -f install
+          cd ..
