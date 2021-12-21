@@ -27,7 +27,7 @@ Or build and install as a Debian package:
 ```bash
 gh repo clone QGCoder/libqgcodeeditor
 cd libqgcodeeditor
-sudo apt -y install -qq devscripts equivs lintian qt5-default
+sudo apt -y install -qq devscripts equivs lintian qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
