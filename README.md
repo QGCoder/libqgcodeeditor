@@ -36,6 +36,6 @@ sudo dpkg -i ../libqgcodeeditor*deb
 
 ## Authors
 
-* [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/ArcEye/qtMDI).
+* [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/unseenlaser/qtMDI).
 * [@koppi](https://github.com/koppi) - Debian packaging, Travis CI.
 
