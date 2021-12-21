@@ -21,7 +21,6 @@ Depends: libqgcodeeditor (= ${binary:Version}),
          qtbase5-dev-tools,
          libx11-dev,
          libxext-dev,
-         libxmu-dev,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Qt5 Designer plugin for QGCodeEditor
