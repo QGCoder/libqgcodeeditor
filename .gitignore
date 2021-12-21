@@ -40,3 +40,9 @@ examples/simple/simple
 examples/simple/ui_mainwindow.h
 examples/pipe/pipe
 examples/pipe/ui_mainwindow.h
+
+.qmake.stash
+DesignerPlugin/moc_predefs.h
+examples/contextMenu/moc_predefs.h
+examples/pipe/moc_predefs.h
+examples/simple/moc_predefs.h
