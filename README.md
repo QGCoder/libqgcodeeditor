@@ -19,8 +19,8 @@ To run one of the examples:
 cd examples
 qmake
 make
-simple/simple
-contextMenu/contextMenu
+./simple/simple
+./contextMenu/contextMenu
 ```
 
 Or build and install as a Debian package:
