@@ -38,6 +38,8 @@ sudo dpkg -i ../libqgcodeeditor*deb
 
 -- Tested on Ubuntu 21.04.
 
+[![C/C++ CI](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/c-cpp.yml) [![CodeQL](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/codeql-analysis.yml)
+
 ## Authors
 
 * [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/unseenlaser/qtMDI).
