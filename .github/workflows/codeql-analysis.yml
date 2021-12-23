@@ -54,6 +54,7 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       run: |
+          sudo apt -y install -qq devscripts equivs lintian qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
           mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
           git clone --depth 1 https://github.com/QGCoder/libqgcodeeditor
           cd libqgcodeeditor
