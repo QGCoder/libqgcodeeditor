@@ -30,7 +30,7 @@ To build and install libqgcodeeditor as an Ubuntu/Debian package, run:
 ```bash
 gh repo clone QGCoder/libqgcodeeditor
 cd libqgcodeeditor
-sudo apt -y install -qq devscripts equivs lintian qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+sudo apt -y -qq install devscripts equivs
 mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
@@ -42,6 +42,6 @@ sudo dpkg -i ../libqgcodeeditor*deb
 
 ## Authors
 
-* [@ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/unseenlaser/qtMDI).
-* [@koppi](https://github.com/koppi) - Debian packaging.
+* **ArcEye** – [ArcEye](https://github.com/ArcEye) - Initial version based on [QtMDI](https://github.com/unseenlaser/qtMDI).
+* **Jakob Flierl** – [koppi](https://github.com/koppi) - Debian packaging.
 
