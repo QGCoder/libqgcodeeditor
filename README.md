@@ -36,7 +36,7 @@ dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../libqgcodeeditor*deb
 ```
 
--- Tested on Ubuntu 21.04.
+– Tested on Ubuntu 22.04.
 
 [![C/C++ CI](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/c-cpp.yml) [![CodeQL](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QGCoder/libqgcodeeditor/actions/workflows/codeql-analysis.yml)
 
