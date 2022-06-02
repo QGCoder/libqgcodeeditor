@@ -23,6 +23,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
+    
+    a.setStyleSheet("QPlainTextEdit{ selection-background-color: darkblue } QWidget { font-size: 12pt; font-family: \"Courier\"; background-color: #00003B; color: #FFA700; font: bold }");
+    
     w.show();
 
     return a.exec();

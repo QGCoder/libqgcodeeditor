@@ -19,7 +19,7 @@
 #ifndef _MY_GCODE_EDITOR_
 #define _MY_GCODE_EDITOR_
 
-#include "QGCodeEditor.h"
+#include <QGCodeEditor/QGCodeEditor.h>
 
 class MyGCodeEditor : public QGCodeEditor
 {

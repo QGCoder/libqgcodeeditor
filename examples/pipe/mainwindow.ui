@@ -62,7 +62,7 @@
   <customwidget>
    <class>QGCodeEditor</class>
    <extends>QPlainTextEdit</extends>
-   <header>QGCodeEditor.h</header>
+   <header>QGCodeEditor/QGCodeEditor.h</header>
   </customwidget>
   <customwidget>
    <class>MyGCodeEditor</class>
