@@ -18,13 +18,13 @@ HighlightingRule rule;
     rule.format = M_WordFormat;
     highlightingRules.append(rule);
 
-    G_WordFormat.setForeground(Qt::darkGreen);
+    G_WordFormat.setForeground(Qt::green);
     G_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("[gG][^\x20]*");
     rule.format = G_WordFormat;
     highlightingRules.append(rule);
 
-    F_WordFormat.setForeground(Qt::darkYellow);
+    F_WordFormat.setForeground(Qt::yellow);
     F_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("[fF][^\x20 ]*");
     rule.format = F_WordFormat;
@@ -42,7 +42,7 @@ HighlightingRule rule;
     rule.format = PQ_WordFormat;
     highlightingRules.append(rule);
 
-    XYZ_WordFormat.setForeground(Qt::black);
+    XYZ_WordFormat.setForeground(Qt::yellow);
     XYZ_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("[xXyYzZaAbBcCuUvVwW][^\x20 ]*");
     rule.format = XYZ_WordFormat;
@@ -54,20 +54,20 @@ HighlightingRule rule;
     rule.format = IJKR_WordFormat;
     highlightingRules.append(rule);
 
-    Param_WordFormat.setForeground(Qt::darkCyan);
+    Param_WordFormat.setForeground(Qt::cyan);
     Param_WordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("#[^\x20 ]*");
     rule.format = Param_WordFormat;
     highlightingRules.append(rule);
 
     // do comments last then won't get colouring of text containing M G F S T etc
-    semicolonCommentFormat.setForeground(Qt::blue);
+    semicolonCommentFormat.setForeground(Qt::white);
     semicolonCommentFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp(";[^\n]*");
     rule.format = semicolonCommentFormat;
     highlightingRules.append(rule);
 
-    braceCommentFormat.setForeground(Qt::blue);
+    braceCommentFormat.setForeground(Qt::magenta);
     braceCommentFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegExp("\\([^\n]*");
     rule.format = braceCommentFormat;

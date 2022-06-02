@@ -51,12 +51,14 @@ QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     bMoreBig = bBigFile = false;
     linesIn = 0;
+
+    /*
     QFont font;
     font.setFamily("Courier");
     font.setFixedPitch(true);
     font.setPointSize(11);
 
-    setFont(font);
+    setFont(font);*/
 
     new QGCodeSyntaxHighlighter(document());
 
@@ -382,7 +384,7 @@ void QGCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
 QPainter painter(lineNumberArea);
 
-    painter.fillRect(event->rect(), Qt::lightGray);
+    //painter.fillRect(event->rect(), Qt::lightGray);
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -394,7 +396,7 @@ QPainter painter(lineNumberArea);
         if (block.isVisible() && bottom >= event->rect().top()) 
             {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
+            painter.setPen(Qt::yellow);
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
             }
