@@ -293,8 +293,13 @@ int max = qMax(1, blockCount());
         ++digits;
         }
 
-    int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
-
+    int space;
+#if QT_VERSION > QT_VERSION_CHECK(5, 3, 2)
+    space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+#else
+    space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+#endif
+    
     return space;
 }
 
