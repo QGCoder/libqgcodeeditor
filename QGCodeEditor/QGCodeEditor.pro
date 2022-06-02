@@ -6,7 +6,7 @@ VERSION  = 0.1.0
 
 QT      *= gui widgets
 
-CONFIG  += qt warn_on shared thread create_prl rtti
+CONFIG  *= qt warn_on shared thread create_prl rtti
 
 HEADERS = QGCodeEditor.h   QGCodeSyntaxHighlighter.h
 SOURCES = QGCodeEditor.cpp QGCodeSyntaxHighlighter.cpp
@@ -24,33 +24,21 @@ unix {
 
 	# INCLUDE_DIR and LIB_DIR specify where to install the include files and the library.
 	# Use qmake INCLUDE_DIR=... LIB_DIR=... , or qmake PREFIX=... to customize your installation.
-
         isEmpty( PREFIX ) {
                 PREFIX_=/usr/local
         } else {
                 PREFIX_=$${PREFIX}
         }
-
-	isEmpty( LIB_DIR ) {
-                LIB_DIR_ = $$[QT_INSTALL_LIBS]
-	} else {
-		isEmpty( PREFIX ) {
-			LIB_DIR_ = $${LIB_DIR}
-	        } else {
-        	        LIB_DIR_ = $${PREFIX_}/lib
-		}
+        isEmpty( LIB_DIR ) {
+                LIB_DIR_ = $${PREFIX_}/lib
+        } else {
+                LIB_DIR_ = $${LIB_DIR}
         }
-
-	isEmpty( INCLUDE_DIR ) {
-               	INCLUDE_DIR_ = $$[QT_INSTALL_HEADERS]
-	} else {
-		isEmpty( PREFIX ) {
-			INCLUDE_DIR_ = $${INCLUDE_DIR}
-        	} else {
-                	INCLUDE_DIR_ = $${PREFIX_}/include
-	        }
-	}
-
+        isEmpty( INCLUDE_DIR ) {
+                INCLUDE_DIR_ = $${PREFIX_}/include
+        } else {
+                INCLUDE_DIR_ = $${INCLUDE_DIR}
+        }
         isEmpty( DOC_DIR ) {
                 macx|darwin-g++ {
                         isEmpty( PREFIX ) {
@@ -96,7 +84,7 @@ unix {
 	features.files = $$PWD/features/qgcodeeditor.prf
 
         # "make install" configuration options
-        INSTALLS += target include features
+        INSTALLS *= target include features
 }
 
 # -------------------
