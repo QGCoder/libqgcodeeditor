@@ -6,18 +6,15 @@ Based upon [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html), with ad
 
 To use on Windows/Linux/Mac clone and build with:
 ```bash
-gh repo clone QGCoder/libqgcodeeditor
-cd libqgcodeeditor
-qmake
-make
+gh repo clone QGCoder/libqgcodeeditor && cd libqgcodeeditor
+qmake && make -j$(nproc)
 sudo make install
 ```
 
 To run one of the examples:
 ```bash
 cd examples
-qmake
-make
+qmake && make
 ./simple/simple
 ./contextMenu/contextMenu
 ```
@@ -28,8 +25,7 @@ A benchmark can be found in [examples/pipe/](examples/pipe).
 
 To build and install libqgcodeeditor as an Ubuntu/Debian package, run:
 ```bash
-gh repo clone QGCoder/libqgcodeeditor
-cd libqgcodeeditor
+gh repo clone QGCoder/libqgcodeeditor && cd libqgcodeeditor
 sudo apt -y -qq install devscripts equivs
 mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
 dpkg-buildpackage -b -rfakeroot -us -uc
