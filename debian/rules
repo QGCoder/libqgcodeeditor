@@ -1,0 +1,63 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+#export DPKG_GENSYMBOLS_CHECK_LEVEL=0
+
+include /usr/share/dpkg/default.mk
+
+QMAKE_FLAGS = QMAKE_CXXFLAGS+="$(CXXFLAGS) $(CPPFLAGS)" QMAKE_LFLAGS+="$(LDFLAGS)" QMAKE_STRIP=
+
+# Update this on SO name bumps so files get shoved around correctly
+SONAME=15
+
+%:
+	dh $@
+
+configure-stamp:
+	dh_testdir
+	mkdir -p QGcodeQt5
+	cp -r src/* QGcodeQt5
+	cd QGcodeQt5 && /usr/bin/qmake -qt=5 DESTDIR=../QGcodeQt5 $(QMAKE_FLAGS)
+	cp -r designer designer-Qt5
+	cd designer-Qt5 && /usr/bin/qmake -qt=5 INCLUDEPATH+=../src QMAKE_LIBDIR+=../QGcodeQt5 DESTDIR=../designer-Qt5 $(QMAKE_FLAGS)
+ifeq ($(qt6), "yes")
+	mkdir -p QGcodeQt6
+	cp -r src/* QGcodeQt6
+	cd QGcodeQt6 && /usr/bin/qmake6 DESTDIR=../QGcodeQt6 $(QMAKE_FLAGS)
+	cp -r designer designer-Qt6
+	cd designer-Qt6 && /usr/bin/qmake6 INCLUDEPATH+=../src QMAKE_LIBDIR+=../QGcodeQt6 DESTDIR=../designer-Qt6 $(QMAKE_FLAGS)
+endif
+	touch $@
+
+override_dh_auto_configure: configure-stamp
+
+build-library-stamp: configure-stamp
+	dh_testdir
+	cd QGcodeQt5 && $(MAKE)
+	cd designer-Qt5 && $(MAKE)
+ifeq ($(qt6), "yes")
+	cd QGcodeQt6 && $(MAKE)
+	cd designer-Qt6 && $(MAKE)
+endif
+	touch $@
+
+override_dh_auto_build: build-library-stamp
+
+execute_after_dh_auto_build-indep:
+	cd doc && doxygen qgcodeeditor.dxy
+
+override_dh_auto_install:
+	$(MAKE) -C QGcodeQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
+	$(MAKE) -C designer-Qt5 install INSTALL_ROOT=$(CURDIR)/debian/libqgcodeeditor-qt5-designer
+ifeq ($(qt6), "yes")
+	$(MAKE) -C QGcodeQt6 INSTALL_ROOT=$(CURDIR)/debian/tmp install
+	$(MAKE) -C designer-Qt6 install INSTALL_ROOT=$(CURDIR)/debian/libqgcodeeditor-qt6-designer
+endif
+
+execute_after_dh_installdocs-indep:
+	dh_doxygen
+
+override_dh_strip:
+	dh_strip --remaining-packages

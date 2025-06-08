@@ -1,0 +1,3 @@
+usr/include/${DEB_HOST_MULTIARCH}/qt5/
+usr/lib/${DEB_HOST_MULTIARCH}/qt5/mkspecs/features/qgcodeeditor.prf
+usr/lib/${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so

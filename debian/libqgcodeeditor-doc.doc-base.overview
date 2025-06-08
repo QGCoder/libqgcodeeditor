@@ -1,0 +1,10 @@
+Document: qgcodeeditor-doc
+Title: QGcodeEditor Documentation
+Author: Jakob Flierl
+Abstract: This manual contains the documentation 
+ for QGcodeEditor, the GUI-toolkit-independent G-Code editor widget.
+Section: Programming/C++
+
+Format: HTML
+Index: /usr/share/doc/libqgcodeeditor-doc/QGcodeEditor/index.html
+Files: /usr/share/doc/libqgcodeeditor-doc/QGcodeEditor/*.html

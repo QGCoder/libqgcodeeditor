@@ -1,0 +1,34 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: libQGCodeEditor
+Upstream-Contact: Jakob Flierl <jakob.flierl@gmail.com>
+Source: https://github.com/ArcEye/QGCodeEditor
+
+Files: *
+Copyright: 
+License: commercial or GPL-2.0 or GPL-3.0:
+/********************************************************************
+* Copyright (C) 2010 - 2016 ArcEye <arceye AT mgware DOT co DOT uk>
+* Copyright (C) 2016       Jakob Flierl <jakob.flierl AT gmail.com>
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+********************************************************************/
+
+Files: QGCodeEditor/examples/*
+Copyright: 2016 Jakob Flierl (jakob.flierl@gmail.com)
+License: GPL-2+
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
+
