@@ -109,7 +109,7 @@ Description: Qt6 Designer plugin for QGCodeEditor (debug)
 Package: libqgcodeeditor-qt5-dev
 Section: libdevel
 Architecture: any
-Depends: libqgcodeeditor (= ${binary:Version}),
+Depends: libqgcodeeditor-qt5 (= ${binary:Version}),
          qtbase5-dev,
          ${misc:Depends}
 Description: Qt5 Designer plugin for QGCodeEditor
@@ -124,7 +124,7 @@ Description: Qt5 Designer plugin for QGCodeEditor
 Package: libqgcodeeditor-qt6-dev
 Section: libdevel
 Architecture: any
-Depends: libqgcodeeditor (= ${binary:Version}),
+Depends: libqgcodeeditor-qt6 (= ${binary:Version}),
          qt6-base-dev,
          ${misc:Depends}
 Description: Qt6 Designer plugin for QGCodeEditor
