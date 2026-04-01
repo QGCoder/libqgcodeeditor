@@ -143,7 +143,7 @@ QStringList list;
         }
     else if(str2.contains(';') )
         {
-        list = str2.split(";", QString::SkipEmptyParts); // skip because could have 2 or more ;
+        list = str2.split(";", Qt::SkipEmptyParts);
         str = list[0];
         str2 = " ;" + list[1];
         }

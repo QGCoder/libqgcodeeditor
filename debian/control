@@ -1,6 +1,5 @@
 Source: libqgcodeeditor
 Priority: optional
-Uploaders: Jakob Flierl <jakob.flierl@gmail.com>
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
 Build-Depends: debhelper-compat (= 13),
                qtbase5-dev,
@@ -34,8 +33,7 @@ Description: G-Code text editor library based on Qt5 - development files
 
 Package: libqgcodeeditor-qt6
 Architecture: any
-Depends: ${misc:Depends},
-         ${shlibs:Depends}
+Depends: ${misc:Depends}
 Pre-Depends: ${misc:Pre-Depends}
 Suggests: libqgcodeeditor-doc
 Multi-Arch: same
@@ -81,7 +79,7 @@ Description: Qt5 Designer plugin for QGCodeEditor (debug)
 Package: libqgcodeeditor-qt6-designer
 Section: misc
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}
 Enhances: qt-designer
 Multi-Arch: same
 Description: Qt6 Designer plugin for QGCodeEditor
@@ -144,6 +142,7 @@ Architecture: all
 Multi-Arch: foreign
 Depends: libjs-jquery,
          ${misc:Depends}
+X-Doc-Main-Package: libqgcodeeditor-qt5
 Description: G-Code text editor library based on Qt5 - development files
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features
@@ -156,9 +155,8 @@ Package: libqgcodeeditor-qt5-dbg
 Priority: extra
 Section: debug
 Architecture: any
-Depends: libqgcodeeditor (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends}
+Depends: libqgcodeeditor-qt5 (= ${binary:Version}),
+         ${misc:Depends}
 Description: G-Code text editor library based on Qt5 - development files
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features
@@ -174,9 +172,8 @@ Package: libqgcodeeditor-qt6-dbg
 Priority: extra
 Section: debug
 Architecture: any
-Depends: libqgcodeeditor (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends}
+Depends: libqgcodeeditor-qt6 (= ${binary:Version}),
+         ${misc:Depends}
 Description: G-Code text editor library based on Qt6 - development files
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features

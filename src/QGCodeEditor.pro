@@ -1,7 +1,11 @@
 # Run "qmake; make; make install" to compile and install the library on Unix systems.
 
 TEMPLATE = lib
-TARGET = QGCodeEditor
+greaterThan(QT_MAJOR_VERSION, 5) {
+     TARGET = qgcodeeditor_qt6
+} else {
+     TARGET = qgcodeeditor_qt5
+}
 VERSION  = 0.0.1
 
 QT      *= gui widgets

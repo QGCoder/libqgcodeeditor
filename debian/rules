@@ -19,7 +19,7 @@ configure-stamp:
 	dh_testdir
 	mkdir -p QGcodeQt5
 	cp -r src/* QGcodeQt5
-	cd QGcodeQt5 && /usr/bin/qmake -qt=5 DESTDIR=../QGcodeQt5 $(QMAKE_FLAGS)
+	cd QGcodeQt5 && /usr/bin/qmake -qt=5 PREFIX=/usr LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 DESTDIR=../QGcodeQt5 $(QMAKE_FLAGS)
 	cp -r designer designer-Qt5
 	cd designer-Qt5 && /usr/bin/qmake -qt=5 INCLUDEPATH+=../src QMAKE_LIBDIR+=../QGcodeQt5 DESTDIR=../designer-Qt5 $(QMAKE_FLAGS)
 ifeq ($(qt6), "yes")
@@ -57,7 +57,9 @@ ifeq ($(qt6), "yes")
 endif
 
 execute_after_dh_installdocs-indep:
-	dh_doxygen
+
+override_dh_makeshlibs:
+	dh_makeshlibs --add-udeb shlibs:Depends -V
 
 override_dh_strip:
 	dh_strip --remaining-packages

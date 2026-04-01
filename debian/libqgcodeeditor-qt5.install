@@ -1,0 +1,4 @@
+usr/lib/${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so
+usr/lib/${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so.0
+usr/lib/${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so.0.0
+usr/lib/${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so.0.0.1
