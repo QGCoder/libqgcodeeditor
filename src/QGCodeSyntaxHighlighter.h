@@ -3,6 +3,13 @@
 #include <QHash>
 #include <QTextCharFormat>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#define QRegExp QRegularExpression
+#else
+#include <QRegExp>
+#endif
+
 class QGCodeSyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -16,7 +23,11 @@ protected:
 private:
     struct HighlightingRule
         {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QRegularExpression pattern;
+#else
         QRegExp pattern;
+#endif
         QTextCharFormat format;
         };
 

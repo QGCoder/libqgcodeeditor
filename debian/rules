@@ -15,19 +15,21 @@ SONAME=15
 %:
 	dh $@
 
+# Use dh_clean but preserve the build directories
+override_dh_clean:
+	dh_clean
+	rm -f configure-stamp build-library-stamp
+
 configure-stamp:
 	dh_testdir
 	mkdir -p QGcodeQt5
 	cp -r src/* QGcodeQt5
-	cd QGcodeQt5 && /usr/bin/qmake -qt=5 PREFIX=/usr LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 DESTDIR=../QGcodeQt5 $(QMAKE_FLAGS)
-	cp -r designer designer-Qt5
-	cd designer-Qt5 && /usr/bin/qmake -qt=5 INCLUDEPATH+=../src QMAKE_LIBDIR+=../QGcodeQt5 DESTDIR=../designer-Qt5 $(QMAKE_FLAGS)
+	cd QGcodeQt5 && /usr/bin/qmake -qt=5 PREFIX=/usr LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 DESTDIR=$$PWD $(QMAKE_FLAGS)
 ifeq ($(qt6), "yes")
 	mkdir -p QGcodeQt6
 	cp -r src/* QGcodeQt6
-	cd QGcodeQt6 && /usr/bin/qmake6 DESTDIR=../QGcodeQt6 $(QMAKE_FLAGS)
-	cp -r designer designer-Qt6
-	cd designer-Qt6 && /usr/bin/qmake6 INCLUDEPATH+=../src QMAKE_LIBDIR+=../QGcodeQt6 DESTDIR=../designer-Qt6 $(QMAKE_FLAGS)
+	cd QGcodeQt6 && /usr/bin/qmake6 QT_QMAKE_VERSION=6 PREFIX=/usr LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 DESTDIR=$$PWD $(QMAKE_FLAGS)
+	rm -f QGcodeQt6/libqgcodeeditor_qt5.so* QGcodeQt6/libQGCodeEditor.prf QGcodeQt6/libQGCodeEditor.prl
 endif
 	touch $@
 
@@ -36,10 +38,10 @@ override_dh_auto_configure: configure-stamp
 build-library-stamp: configure-stamp
 	dh_testdir
 	cd QGcodeQt5 && $(MAKE)
-	cd designer-Qt5 && $(MAKE)
+	@echo "Built Qt5"
 ifeq ($(qt6), "yes")
 	cd QGcodeQt6 && $(MAKE)
-	cd designer-Qt6 && $(MAKE)
+	@echo "Built Qt6"
 endif
 	touch $@
 
@@ -50,10 +52,8 @@ execute_after_dh_auto_build-indep:
 
 override_dh_auto_install:
 	$(MAKE) -C QGcodeQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
-	$(MAKE) -C designer-Qt5 install INSTALL_ROOT=$(CURDIR)/debian/libqgcodeeditor-qt5-designer
 ifeq ($(qt6), "yes")
-	$(MAKE) -C QGcodeQt6 INSTALL_ROOT=$(CURDIR)/debian/tmp install
-	$(MAKE) -C designer-Qt6 install INSTALL_ROOT=$(CURDIR)/debian/libqgcodeeditor-qt6-designer
+	$(MAKE) -C QGcodeQt6 install INSTALL_ROOT=$(CURDIR)/debian/tmp-qt6
 endif
 
 execute_after_dh_installdocs-indep:

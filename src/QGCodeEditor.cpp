@@ -44,11 +44,15 @@
  * - firstBlockNum() // first block in the viewport
  */
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include "QGCodeEditor.h"
 
 #include "QGCodeSyntaxHighlighter.h"
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // this class is used in Designer directly as a  widget
@@ -219,6 +223,25 @@ QStringList list;
     // or one before comments
 
     // get rid of line numbers
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    str.remove(QRegularExpression("N([0-9]*)"));
+    // space G Code elements for readability
+    str.replace(QRegularExpression("G([0-9]*)"), " G\\1");
+    str.replace(QRegularExpression("M([0-9]*)"), " M\\1");
+    str.replace(QRegularExpression("F([0-9]*)"), " F\\1");
+    str.replace(QRegularExpression("S([0-9]*)"), " S\\1");
+    str.replace(QRegularExpression("P([0-9]*)"), " P\\1");
+    str.replace(QRegularExpression("Q([0-9]*)"), " Q\\1");
+    str.replace(QRegularExpression("X([0-9]*)"), " X\\1");
+    str.replace(QRegularExpression("Y([0-9]*)"), " Y\\1");
+    str.replace(QRegularExpression("Z([0-9]*)"), " Z\\1");
+    str.replace(QRegularExpression("I([0-9]*)"), " I\\1");
+    str.replace(QRegularExpression("J([0-9]*)"), " J\\1");
+    str.replace(QRegularExpression("K([0-9]*)"), " K\\1");
+    str.replace(QRegularExpression("R([0-9]*)"), " R\\1");
+    // get rid of any double spacing and leading spaces
+    str.replace(QRegularExpression("  "), " ");
+#else
     str.remove(QRegExp("N([0-9]*)"));
     // space G Code elements for readability
     str.replace(QRegExp("G([0-9]*)"), " G\\1");
@@ -236,6 +259,7 @@ QStringList list;
     str.replace(QRegExp("R([0-9]*)"), " R\\1");
     // get rid of any double spacing and leading spaces
     str.replace(QRegExp("  "), " ");
+#endif
     str = str.simplified();
     // push to 2nd line if stupidly been put on same line
     if(str2.length())
