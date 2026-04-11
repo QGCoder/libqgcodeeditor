@@ -1,20 +1,48 @@
 /********************************************************************
-* Copyright (C) 2010 - 2016 ArcEye <arceye AT mgware DOT co DOT uk>
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-********************************************************************/
+ * Copyright (C) 2010 - 2016 ArcEye <arceye AT mgware DOT co DOT uk>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ ********************************************************************/
+
+/**
+ * @file QGCodeEditor.cpp
+ * @brief Implementation of QGCodeEditor - a text editor for G-code files
+ *
+ * @class QGCodeEditor
+ * @brief Extended QPlainTextEdit with G-code specific features:
+ * - Syntax highlighting
+ * - Line numbers
+ * - Large file handling (chunks)
+ * - Modification tracking
+ *
+ * New functions:
+ * - cursorUp()
+ * - cursorDown()
+ * - getLineNo()
+ * - highlightLine()
+ * - isModified()
+ * - getLineCount()
+ * - getCurrentText()
+ *
+ * Overloaded:
+ * - appendNewPlainText(const QString &text)
+ * - clear()
+ *
+ * SubClassed:
+ * - firstBlockNum() // first block in the viewport
+ */
 
 #include <QtGui>
 
@@ -39,6 +67,16 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Constructor
+ * @param parent Parent widget
+ *
+ * Initializes the editor with:
+ * - Line number area
+ * - Syntax highlighter
+ * - Large file handling (CHUNK_SIZE = 200 lines)
+ * - Current line highlighting
+ */
 QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
     lineNumberArea = new LineNumberArea(this);
@@ -69,12 +107,15 @@ QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
 }
 
+/**
+ * @brief Destructor
+ */
 QGCodeEditor::~QGCodeEditor()
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // formats first and adds to QStringList before appending 
 // for later comparison using list to test if text changed
 //
@@ -85,6 +126,13 @@ QGCodeEditor::~QGCodeEditor()
 // the editor, to a 5 sec load into both editor and GL viewer
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Appends formatted text to the editor
+ * @param text Text to append
+ *
+ * Handles large files by caching content after CHUNK_SIZE (200) lines
+ * to prevent GUI lockups. Uses chunked loading for files > 200 lines.
+ */
 void QGCodeEditor::appendNewPlainText(const QString &text)
 {
 QString str;
@@ -112,6 +160,12 @@ QFile file("/tmp/qgc_cache");
 
 // overloaded to clear the QStringList first
 
+/**
+ * @brief Clears the editor content and internal buffers
+ *
+ * Overloaded to also clear the QStringList buffers used for
+ * modification tracking and large file handling.
+ */
 void QGCodeEditor::clear()
 {
     excess->clear();
@@ -121,6 +175,18 @@ void QGCodeEditor::clear()
     linesIn = 0;
 }
 
+/**
+ * @brief Formats a line of G-code for display
+ * @param text Input line to format
+ * @return Formatted G-code string
+ *
+ * Performs the following transformations:
+ * - Converts to uppercase
+ * - Removes extra spaces
+ * - Strips line numbers (N-words)
+ * - Adds spaces around G-code commands for readability
+ * - Separates comments onto a new line
+ */
 QString QGCodeEditor::formatLine(QString text)
 {
 QString str, str2;
@@ -282,16 +348,134 @@ int QGCodeEditor::getLineCount()
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-int QGCodeEditor::lineNumberAreaWidth()
-{
-int digits = 1;
-int max = qMax(1, blockCount());
+// big problem with the base editor was that it registers that document changed and that
+// modification changed (usually by using Ctrl Z or Ctrl Shift Z)
+// but you still could not tell if the document is now different overall or not
+// By saving a copy of what was loaded and then comparing it to what is present, it
+// reports accurately on any change.
 
-    while (max >= 10) 
+/**
+ * @brief Checks if the document has been modified
+ * @return true if the document content differs from original, false otherwise
+ *
+ * Compares current document content against the stored original content
+ * to accurately detect modifications.
+ */
+bool QGCodeEditor::isModified()
+{
+    QString txt = toPlainText();
+    QStringList list = txt.split( "\n");
+    
+    if( contents->size() != list.size() )
+        return true;
+    
+    for(int x = 0; x < contents->size(); x++)
         {
-        max /= 10;
-        ++digits;
+        if( contents->at(x) != list[x] )
+            return true;
         }
+    return false;
+}
+
+
+/**
+ * @brief Gets the text at the current cursor position
+ * @return Text of the line at cursor position, trimmed
+ */
+QString QGCodeEditor::getCurrentText()
+{
+QTextDocument *doc = document();
+
+    QTextBlock block = doc->findBlock( textCursor().position());
+    return(block.text().trimmed().toLatin1());
+}
+
+/**
+ * @brief Moves cursor up one block
+ */
+void QGCodeEditor::cursorUp()
+{
+    moveCursor(QTextCursor::PreviousBlock);
+}
+
+/**
+ * @brief Moves cursor down one block
+ */
+void QGCodeEditor::cursorDown()
+{
+    moveCursor(QTextCursor::NextBlock);
+}
+
+/**
+ * @brief Gets the current line number
+ * @return Line number where cursor is positioned (1-based)
+ */
+int QGCodeEditor::getLineNo()
+{
+int numBlocks = blockCount();
+QTextDocument *doc = document();
+
+    QTextBlock blk = doc->findBlock( textCursor().position() );
+    QTextBlock blk2 = doc->begin();
+
+    for(int x = 1; x <= numBlocks; x++)
+        {
+        if(blk == blk2)
+            return x;
+        blk2 = blk2.next();
+        }
+    return 0;
+}
+
+/**
+ * @brief Moves cursor to specified line
+ * @param line Line number to highlight (1-based)
+ */
+void QGCodeEditor::highlightLine(int line)
+{
+int num = 0;
+
+    // when file loaded, highlights first blank line at end with EOF,
+    // so never matched and returns 0 unless go up 1 first
+
+    if( blockCount()) 
+        {
+        if(line > 0 && line <= blockCount()) 
+            {
+            cursorUp();
+            num = getLineNo();
+            if(num > line) 
+                {
+                do
+                    {
+                    cursorUp();
+                    num--;
+                    }while(num > line);
+                }
+            else
+                {
+                while(num < line)
+                    {
+                    cursorDown();
+                    num++;
+                    }
+                }
+        }
+        else
+            qDebug() << "Invalid line number passed";
+        }
+    else
+        qDebug() << "No blocks found";
+}
+
+/**
+ * @brief Gets the total line count
+ * @return Number of lines in the document
+ */
+int QGCodeEditor::getLineCount() 
+{
+    return blockCount() - 1;
+}
 
     int space;
 #if QT_VERSION > QT_VERSION_CHECK(5, 3, 2)
@@ -303,11 +487,20 @@ int max = qMax(1, blockCount());
     return space;
 }
 
+/**
+ * @brief Updates the line number area width
+ * @param newBlockCount Number of blocks (unused, kept for signature compatibility)
+ */
 void QGCodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
+/**
+ * @brief Updates the line number area
+ * @param rect Rectangle to update
+ * @param dy Vertical scroll offset
+ */
 void QGCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
     if (dy)
@@ -319,6 +512,12 @@ void QGCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
         updateLineNumberAreaWidth(0);
 }
 
+/**
+ * @brief Handles resize events
+ * @param e Resize event
+ *
+ * Updates the geometry of the line number area when the editor is resized.
+ */
 void QGCodeEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
@@ -327,6 +526,12 @@ void QGCodeEditor::resizeEvent(QResizeEvent *e)
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
+/**
+ * @brief Highlights the current line
+ *
+ * Applies a highlight to the line containing the cursor.
+ * Also triggers loading of the next chunk for large files.
+ */
 void QGCodeEditor::highlightCurrentLine()
 {
 QList<QTextEdit::ExtraSelection> extraSelections;
@@ -352,6 +557,12 @@ QColor lineColor = QColor(Qt::darkBlue).lighter(60);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Loads the next chunk of cached content
+ *
+ * Loads ADD_SIZE (100) lines from the excess cache into the visible editor.
+ * Used for progressive loading of large files to prevent GUI freezing.
+ */
 void QGCodeEditor::loadNextChunk()
 {
 int x, y;
@@ -385,6 +596,12 @@ QString str;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Paints the line number area
+ * @param event Paint event
+ *
+ * Draws line numbers in the left margin of the editor.
+ */
 void QGCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
 QPainter painter(lineNumberArea);

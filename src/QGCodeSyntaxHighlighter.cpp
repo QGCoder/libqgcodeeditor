@@ -1,9 +1,36 @@
+/**
+ * @file QGCodeSyntaxHighlighter.cpp
+ * @brief Implementation of QGCodeSyntaxHighlighter for G-code syntax highlighting
+ */
+
 #include "QGCodeSyntaxHighlighter.h"
 
 #include <QSyntaxHighlighter>
 
 #include "QGCodeEditor.h"
 
+/**
+ * @class QGCodeSyntaxHighlighter
+ * @brief Syntax highlighter for G-code (CNC machine control language)
+ *
+ * Highlights different G-code commands with distinct colors:
+ * - M/T words: Red
+ * - G words: Green
+ * - F words: Yellow
+ * - S words: Magenta
+ * - P/Q words: Green
+ * - X/Y/Z/A/B/C/U/V/W coordinates: Yellow
+ * - I/J/K/R arcs: Dark Gray
+ * - Parameters (#): Cyan
+ * - Comments (; and ()): White/Magenta
+ */
+
+/**
+ * @brief Constructor
+ * @param parent Parent QTextDocument object
+ *
+ * Initializes all highlighting rules for G-code syntax elements.
+ */
 QGCodeSyntaxHighlighter::QGCodeSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
@@ -74,6 +101,13 @@ HighlightingRule rule;
     highlightingRules.append(rule);
 }
 
+/**
+ * @brief Highlights a single block of text
+ * @param text The text block to highlight
+ *
+ * Applies all matching highlighting rules to the given text block,
+ * coloring G-code commands and comments appropriately.
+ */
 void QGCodeSyntaxHighlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightingRule &rule, highlightingRules)
