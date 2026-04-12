@@ -119,6 +119,8 @@ execute_after_dh_installdocs-indep:
 
 override_dh_makeshlibs:
 	dh_makeshlibs --add-udeb shlibs:Depends
+	echo "shlibs:Depends=" > debian/libqgcodeeditor-qt5-designer.substvars
+	echo "shlibs:Depends=" > debian/libqgcodeeditor-qt6-designer.substvars
 
 override_dh_installdeb:
 	dh_installdeb

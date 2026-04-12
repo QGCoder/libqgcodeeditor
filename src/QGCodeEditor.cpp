@@ -380,7 +380,6 @@ int QGCodeEditor::getLineCount()
 
 /**
  * @brief Updates the line number area width
- * @param newBlockCount Number of blocks (unused, kept for signature compatibility)
  */
 int QGCodeEditor::lineNumberAreaWidth()
 {
