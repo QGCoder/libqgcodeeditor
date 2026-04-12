@@ -74,7 +74,7 @@ build-examples-stamp: build-library-stamp
 		mkdir -p examples/QGcode$${e}Qt6; \
 		cp -r src/* examples/QGcode$${e}Qt6; \
 		cp -r examples/$$e/* examples/QGcode$${e}Qt6; \
-		cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+=-lqgcodeeditor_qt6 $(QMAKE_FLAGS); \
+		cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt6 -lqgcodeeditor_qt6" $(QMAKE_FLAGS); \
 		$(MAKE); \
 		cd ../..; \
 	done

@@ -14,9 +14,9 @@ QT += designer
 # Work around QTBUG-39300.
 CONFIG -= android_install
 greaterThan(QT_MAJOR_VERSION, 5) {
-     LIBS += -lqgcodeeditor_qt6
+     LIBS += -L$$PWD/../QGcodeQt6 -lqgcodeeditor_qt6
 } else {
-     LIBS += -lqgcodeeditor_qt5
+     LIBS += -L$$PWD/../QGcodeQt5 -lqgcodeeditor_qt5
 }
 
 HEADERS = qgcodeeditorplugin.h
