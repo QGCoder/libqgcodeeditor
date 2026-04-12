@@ -51,11 +51,6 @@ jobs:
         rm -rf QGcodeQt5 QGcodeQt6 configure-stamp build-library-stamp debian/tmp debian/libqgcodeeditor-qt* debian/*.debhelper.log debian/*.substvars
         dpkg-buildpackage -b -rfakeroot -us -uc
 
-    - name: Install packages
-      run: |
-        sudo dpkg -i ../libqgcodeeditor-*.deb
-        sudo apt -y -f install
-
     - name: Run lintian
       run: |
         lintian ../libqgcodeeditor*.deb | lintian-info
