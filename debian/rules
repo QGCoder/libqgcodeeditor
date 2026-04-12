@@ -18,7 +18,7 @@ SONAME=15
 # Use dh_clean but preserve the build directories
 override_dh_clean:
 	dh_clean
-	rm -f configure-stamp build-library-stamp
+	rm -f configure-stamp build-library-stamp build-examples-stamp
 
 configure-stamp:
 	dh_testdir
@@ -27,7 +27,7 @@ configure-stamp:
 	cd QGcodeQt5 && /usr/bin/qmake -qt=5 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
 	mkdir -p QGcodeQt6
 	cp -r src/* QGcodeQt6
-	cd QGcodeQt6 && /usr/bin/qmake6 QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
+	cd QGcodeQt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
 	rm -f QGcodeQt6/libqgcodeeditor_qt5.so* QGcodeQt6/libQGCodeEditor.prf QGcodeQt6/libQGCodeEditor.prl
 	touch $@
 
@@ -46,6 +46,28 @@ override_dh_auto_build: build-library-stamp
 execute_after_dh_auto_build-indep:
 	cd doc && doxygen qgcodeeditor.dxy
 
+build-examples-stamp: build-library-stamp
+	dh_testdir
+	for e in simple pipe contextMenu; do \
+		if [ -f examples/$$e/$$e.pro ]; then \
+			mkdir -p examples/QGcode$${e}Qt5; \
+			cp -r src/* examples/QGcode$${e}Qt5; \
+			cp -r examples/$$e/* examples/QGcode$${e}Qt5; \
+			cd examples/QGcode$${e}Qt5 && /usr/bin/qmake -qt=5 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS); \
+			$(MAKE); \
+			cd ../..; \
+			mkdir -p examples/QGcode$${e}Qt6; \
+			cp -r src/* examples/QGcode$${e}Qt6; \
+			cp -r examples/$$e/* examples/QGcode$${e}Qt6; \
+			cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS); \
+			$(MAKE); \
+			cd ../..; \
+		fi \
+	done
+	touch build-examples-stamp
+
+override_dh_auto_build: build-examples-stamp
+
 override_dh_auto_install:
 	$(MAKE) -C QGcodeQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
 	$(MAKE) -C QGcodeQt6 install INSTALL_ROOT=$(CURDIR)/debian/tmp
@@ -59,6 +81,20 @@ override_dh_auto_install:
 	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/lib/$${DEB_HOST_MULTIARCH}/qt6
 	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor
 	cp -a debian/tmp/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/* debian/libqgcodeeditor-qt6-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/
+	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/share/doc/libqgcodeeditor-qt5-examples
+	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/share/doc/libqgcodeeditor-qt6-examples
+	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5
+	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6
+	cp -a examples/QGcodesimpleQt5/simple debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodepipeQt5/pipe debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodecontextMenuQt5/contextMenu debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodesimpleQt6/simple debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
+	cp -a examples/QGcodepipeQt6/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
+	cp -a examples/QGcodecontextMenuQt6/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
+
+execute_after_dh_auto_install:
+	install -m0755 -d debian/libqgcodeeditor-qt5/usr/lib/$${DEB_HOST_MULTIARCH}
+	install -m0755 -d debian/libqgcodeeditor-qt6/usr/lib/$${DEB_HOST_MULTIARCH}
 
 execute_after_dh_installdocs-indep:
 

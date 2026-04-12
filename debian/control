@@ -79,6 +79,32 @@ Description: Qt6 G-Code editor library - development files
  This package contains the files needed to develop and compile programs
  using QGCodeEditor linked with Qt version 6.
 
+Package: libqgcodeeditor-qt5-examples
+Section: examples
+Architecture: all
+Depends: libqgcodeeditor-qt5,
+         ${misc:Depends}
+Description: Qt5 G-Code editor library - example applications
+ libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains example applications compiled against Qt5.
+
+Package: libqgcodeeditor-qt6-examples
+Section: examples
+Architecture: all
+Depends: libqgcodeeditor-qt6,
+         ${misc:Depends}
+Description: Qt6 G-Code editor library - example applications
+ libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains example applications compiled against Qt6.
+
 Package: libqgcodeeditor-doc
 Section: doc
 Architecture: all
