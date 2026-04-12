@@ -63,7 +63,12 @@ override_dh_auto_install:
 execute_after_dh_installdocs-indep:
 
 override_dh_makeshlibs:
-	dh_makeshlibs --add-udeb shlibs:Depends -V
+	dh_makeshlibs --add-udeb shlibs:Depends
+
+override_dh_installdeb:
+	dh_installdeb
+	rm -f debian/libqgcodeeditor-qt5/DEBIAN/triggers
+	rm -f debian/libqgcodeeditor-qt6/DEBIAN/triggers
 
 override_dh_strip:
 	dh_strip --remaining-packages

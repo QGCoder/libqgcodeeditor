@@ -68,7 +68,7 @@ Package: libqgcodeeditor-qt6-dev
 Section: libdevel
 Architecture: any
 Depends: libqgcodeeditor-qt6 (= ${binary:Version}),
-         qtbase6-dev,
+         qt6-base-dev,
          ${misc:Depends}
 Description: Qt6 G-Code editor library - development files
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
