@@ -25,7 +25,9 @@
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     #include <QtUiPlugin/QDesignerCustomWidgetInterface>
     #include <QtUiPlugin/QDesignerExportWidget>
-    #define QDESIGNER_WIDGET_EXPORT QGCODEEDITOR_EXPORT
+    #if !defined(QDESIGNER_WIDGET_EXPORT)
+        #define QDESIGNER_WIDGET_EXPORT QGCODEEDITOR_EXPORT
+    #endif
 #elif QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     #include <QtUiPlugin/QDesignerExportWidget>
 #else

@@ -33,7 +33,7 @@ MyGCodeEditor::MyGCodeEditor(QWidget *parent) : QGCodeEditor(parent)
     actionRunFrom = new QAction(this);
     actionRunFrom->setObjectName(QString::fromUtf8("actionRunFrom"));
     actionRunFrom->setText(tr("Run"));
-    actionRunFrom->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+    actionRunFrom->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_R));
 }
 
 void MyGCodeEditor::contextMenuEvent(QContextMenuEvent *event)

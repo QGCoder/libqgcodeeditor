@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QList<QKeySequence> s; // exit app with ESC or CTRL+Q
-    s << QKeySequence(Qt::Key_Escape) << QKeySequence(Qt::CTRL + Qt::Key_Q);
+    s << QKeySequence(Qt::Key_Escape) << QKeySequence(Qt::CTRL | Qt::Key_Q);
     ui->action_Quit->setShortcuts(s);
 
     // disable line buffering on stdin

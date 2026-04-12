@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QList<QKeySequence> s; // exit app with ESC or CTRL+Q
-    s << QKeySequence(Qt::Key_Escape) << QKeySequence(Qt::CTRL + Qt::Key_Q);
+    s << QKeySequence(Qt::Key_Escape) << QKeySequence(Qt::CTRL | Qt::Key_Q);
     ui->action_Quit->setShortcuts(s);
 
     connect(ui->gcode, SIGNAL(runFromSelected(int)), this, SLOT(onRunFromSelected(int)));
@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // add a non-menubar keyboard shortcut to QMainWindow
     QAction* a = new QAction(this);
     QList<QKeySequence> sr; // run from selected line with F1 or CTRL+R
-    sr << QKeySequence(Qt::Key_F1) << QKeySequence(Qt::CTRL + Qt::Key_R);
+    sr << QKeySequence(Qt::Key_F1) << QKeySequence(Qt::CTRL | Qt::Key_R);
     a->setShortcuts(sr);
     connect(a, SIGNAL(triggered()), ui->gcode, SLOT(onRunFrom()));
     this->addAction(a);
