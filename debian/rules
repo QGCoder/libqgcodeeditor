@@ -64,15 +64,19 @@ build-examples-stamp: build-library-stamp
 		if [ -f examples/$$e/$$e.pro ]; then \
 			mkdir -p examples/QGcode$${e}Qt5; \
 			cp -r src/* examples/QGcode$${e}Qt5; \
+			mkdir -p examples/QGcode$${e}Qt5/QGCodeEditor; \
+			mv examples/QGcode$${e}Qt5/*.h examples/QGcode$${e}Qt5/QGCodeEditor/; \
 			cp -r examples/$$e/* examples/QGcode$${e}Qt5; \
-			cd examples/QGcode$${e}Qt5 && /usr/bin/qmake -qt=5 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt5 -lqgcodeeditor_qt5" $(QMAKE_FLAGS); \
+			cd examples/QGcode$${e}Qt5 && /usr/bin/qmake -qt=5 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt5 -lqgcodeeditor_qt5" INCLUDEPATH+="-I$(CURDIR)/QGcodeQt5" $(QMAKE_FLAGS); \
 			$(MAKE); \
 			cd ../..; \
 		fi; \
 		mkdir -p examples/QGcode$${e}Qt6; \
 		cp -r src/* examples/QGcode$${e}Qt6; \
+		mkdir -p examples/QGcode$${e}Qt6/QGCodeEditor; \
+		mv examples/QGcode$${e}Qt6/*.h examples/QGcode$${e}Qt6/QGCodeEditor/; \
 		cp -r examples/$$e/* examples/QGcode$${e}Qt6; \
-		cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt6 -lqgcodeeditor_qt6" $(QMAKE_FLAGS); \
+		cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt6 -lqgcodeeditor_qt6" INCLUDEPATH+="-I$(CURDIR)/QGcodeQt6" $(QMAKE_FLAGS); \
 		$(MAKE); \
 		cd ../..; \
 	done
