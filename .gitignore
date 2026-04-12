@@ -88,3 +88,17 @@ doc/html/
 html/
 src/libqgcodeeditor_qt5.prl
 src/libqgcodeeditor_qt5.so*
+
+build-examples-stamp
+debian/libqgcodeeditor-qt5-examples.debhelper.log
+debian/libqgcodeeditor-qt5-examples.substvars
+debian/libqgcodeeditor-qt5-examples/
+debian/libqgcodeeditor-qt6-examples.debhelper.log
+debian/libqgcodeeditor-qt6-examples.substvars
+debian/libqgcodeeditor-qt6-examples/
+examples/QGcodecontextMenuQt5/
+examples/QGcodecontextMenuQt6/
+examples/QGcodepipeQt5/
+examples/QGcodepipeQt6/
+examples/QGcodesimpleQt5/
+examples/QGcodesimpleQt6/
