@@ -102,3 +102,12 @@ examples/QGcodepipeQt5/
 examples/QGcodepipeQt6/
 examples/QGcodesimpleQt5/
 examples/QGcodesimpleQt6/
+
+QGcodeEditorDesignerQt5/
+QGcodeEditorDesignerQt6/
+debian/libqgcodeeditor-qt5-designer.debhelper.log
+debian/libqgcodeeditor-qt5-designer.substvars
+debian/libqgcodeeditor-qt5-designer/
+debian/libqgcodeeditor-qt6-designer.debhelper.log
+debian/libqgcodeeditor-qt6-designer.substvars
+debian/libqgcodeeditor-qt6-designer/
