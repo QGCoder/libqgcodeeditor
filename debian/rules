@@ -55,8 +55,6 @@ build-library-stamp: configure-stamp
 	@echo "Built Qt6 Designer"
 	touch $@
 
-override_dh_auto_build: build-library-stamp
-
 execute_after_dh_auto_build-indep:
 	cd doc && doxygen qgcodeeditor.dxy
 
@@ -80,7 +78,7 @@ build-examples-stamp: build-library-stamp
 	done
 	touch build-examples-stamp
 
-override_dh_auto_build: build-examples-stamp
+override_dh_auto_build: build-library-stamp build-examples-stamp
 
 override_dh_auto_install:
 	$(MAKE) -C QGcodeQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
