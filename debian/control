@@ -105,6 +105,26 @@ Description: Qt6 G-Code editor library - example applications
  .
  This package contains example applications compiled against Qt6.
 
+Package: libqgcodeeditor-qt5-designer
+Architecture: any
+Depends: ${misc:Depends},
+        libqt5designer5,
+        libqgcodeeditor-qt5
+Description: Qt5 Designer plugin for QGCodeEditor widget
+ A widget for displaying and interacting with G-Code in Qt Designer.
+ This package contains the Qt Designer plugin for the QGCodeEditor widget
+ for use with Qt5.
+
+Package: libqgcodeeditor-qt6-designer
+Architecture: any
+Depends: ${misc:Depends},
+        libqt6designer6,
+        libqgcodeeditor-qt6
+Description: Qt6 Designer plugin for QGCodeEditor widget
+ A widget for displaying and interacting with G-Code in Qt Designer.
+ This package contains the Qt Designer plugin for the QGCodeEditor widget
+ for use with Qt6.
+
 Package: libqgcodeeditor-doc
 Section: doc
 Architecture: all

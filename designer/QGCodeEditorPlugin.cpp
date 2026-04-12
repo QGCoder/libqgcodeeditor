@@ -22,7 +22,11 @@
 #include <QtPlugin>
 
 #include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #include <QtUiPlugin/QDesignerCustomWidgetInterface>
+    #include <QtUiPlugin/QDesignerExportWidget>
+    #define QDESIGNER_WIDGET_EXPORT QGCODEEDITOR_EXPORT
+#elif QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     #include <QtUiPlugin/QDesignerExportWidget>
 #else
     #include <QtDesigner/QDesignerExportWidget>
@@ -34,6 +38,9 @@
 #  endif
 #endif
 
+#if QT_VERSION >= 0x060000
+class QGCodeEditor;
+#else
 class QDESIGNER_WIDGET_EXPORT GCodeEditor : public QGCodeEditor
 {
 public:
@@ -42,6 +49,7 @@ public:
   {
   }
 };
+#endif
 
 QGCodeEditorPlugin::QGCodeEditorPlugin(QObject *parent)
  : QObject(parent)

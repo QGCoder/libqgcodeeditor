@@ -12,6 +12,10 @@ QMAKE_FLAGS = QMAKE_CXXFLAGS+="$(CXXFLAGS) $(CPPFLAGS)" QMAKE_LFLAGS+="$(LDFLAGS
 # Update this on SO name bumps so files get shoved around correctly
 SONAME=15
 
+# Designer plugin directories
+DESIGNER_QT5=QGcodeEditorDesignerQt5
+DESIGNER_QT6=QGcodeEditorDesignerQt6
+
 %:
 	dh $@
 
@@ -29,6 +33,12 @@ configure-stamp:
 	cp -r src/* QGcodeQt6
 	cd QGcodeQt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
 	rm -f QGcodeQt6/libqgcodeeditor_qt5.so* QGcodeQt6/libQGCodeEditor.prf QGcodeQt6/libQGCodeEditor.prl
+	mkdir -p $(DESIGNER_QT5)
+	cp -r designer/* $(DESIGNER_QT5)
+	cd $(DESIGNER_QT5) && /usr/bin/qmake -qt=5 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
+	mkdir -p $(DESIGNER_QT6)
+	cp -r designer/* $(DESIGNER_QT6)
+	cd $(DESIGNER_QT6) && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
 	touch $@
 
 override_dh_auto_configure: configure-stamp
@@ -39,6 +49,10 @@ build-library-stamp: configure-stamp
 	@echo "Built Qt5"
 	cd QGcodeQt6 && $(MAKE)
 	@echo "Built Qt6"
+	cd $(DESIGNER_QT5) && $(MAKE)
+	@echo "Built Qt5 Designer"
+	cd $(DESIGNER_QT6) && $(MAKE)
+	@echo "Built Qt6 Designer"
 	touch $@
 
 override_dh_auto_build: build-library-stamp
@@ -91,6 +105,11 @@ override_dh_auto_install:
 	cp -a examples/QGcodesimpleQt6/simple debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
 	cp -a examples/QGcodepipeQt6/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
 	cp -a examples/QGcodecontextMenuQt6/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
+	install -m0755 -d debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer
+	cp -a $(DESIGNER_QT5)/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer/
+	install -m0755 -d debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer
+	cp -a $(DESIGNER_QT6)/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer/
+	install -m0644 $(DESIGNER_QT6)/QGCodeEditorPlugin.json debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer/
 
 execute_after_dh_auto_install:
 	install -m0755 -d debian/libqgcodeeditor-qt5/usr/lib/$${DEB_HOST_MULTIARCH}

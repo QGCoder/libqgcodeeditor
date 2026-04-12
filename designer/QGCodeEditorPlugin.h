@@ -33,9 +33,10 @@
 class QGCodeEditorPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
   Q_OBJECT
-#if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetCollectionInterface")
-//  Q_PLUGIN_METADATA(IID "QGCodeEditorPlugin" FILE "QGCodeEditorPlugin.json")
+#if QT_VERSION >= 0x060000
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.DesignerCustomWidget" FILE "QGCodeEditorPlugin.json")
+#elif QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetCollectionInterface" FILE "QGCodeEditorPlugin.json")
 #endif
   Q_INTERFACES(QDesignerCustomWidgetInterface)
  public:
