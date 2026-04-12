@@ -97,14 +97,14 @@ override_dh_auto_install:
 	cp -a debian/tmp/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/* debian/libqgcodeeditor-qt6-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/
 	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/share/doc/libqgcodeeditor-qt5-examples
 	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/share/doc/libqgcodeeditor-qt6-examples
-	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5
-	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6
-	cp -a examples/QGcodesimpleQt5/simple debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
-	cp -a examples/QGcodepipeQt5/pipe debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
-	cp -a examples/QGcodecontextMenuQt5/contextMenu debian/libqgcodeeditor-qt5-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt5/
-	cp -a examples/QGcodesimpleQt6/simple debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
-	cp -a examples/QGcodepipeQt6/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
-	cp -a examples/QGcodecontextMenuQt6/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/x86_64-linux-gnu/qgcodeeditor-examples/qt6/
+	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5
+	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6
+	cp -a examples/QGcodesimpleQt5/simple debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodepipeQt5/pipe debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodecontextMenuQt5/contextMenu debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
+	cp -a examples/QGcodesimpleQt6/simple debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
+	cp -a examples/QGcodepipeQt6/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
+	cp -a examples/QGcodecontextMenuQt6/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
 	install -m0755 -d debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer
 	cp -a $(DESIGNER_QT5)/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer/
 	install -m0755 -d debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer
