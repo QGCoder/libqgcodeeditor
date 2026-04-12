@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.target }}-${{ matrix.qt-version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - ubuntu-latest
+        qt-version:
+          - qt5
+          - qt6
+    runs-on: ${{ matrix.target }}
+    env:
+      qt6: ${{ matrix.qt-version == 'qt6' && 'yes' || 'no' }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install devscripts
+      run: |
+        sudo apt -qq update
+        sudo apt -y dist-upgrade
+        sudo DEBIAN_FRONTEND=noninteractive apt install -qq devscripts equivs lintian
+        mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
+
+    - name: Build source package
+      env:
+        DEBFULLNAME: "Jakob Flierl"
+        DEBEMAIL: "jakob.flierl@gmail.com"
+      run: |
+        export TARGET=$(. /etc/lsb-release && echo $DISTRIB_CODENAME)
+        git fetch --unshallow
+        git fetch --tags
+        VERSION="$(git tag -l | tail -n1 | sed -e "s/^v//" -e "s/-/+git/")"
+        DEBEMAIL="${DEBEMAIL}" dch --create \
+            --distribution ${TARGET} \
+            --package libqgcodeeditor \
+            --newversion ${VERSION}~${TARGET}1 \
+            "Automatic release build"
+        debuild -S -sa -us -uc -d
+
+    - name: Clean and rebuild packages
+      run: |
+        rm -rf QGcodeQt5 QGcodeQt6 configure-stamp build-library-stamp debian/tmp debian/libqgcodeeditor-qt* debian/*.debhelper.log debian/*.substvars
+        dpkg-buildpackage -b -rfakeroot -us -uc
+
+    - name: Run lintian
+      run: |
+        lintian ../libqgcodeeditor*.deb | lintian-info
+
+    - name: Upload artifacts
+      run: |
+        mkdir -p artifacts
+        cp ../*.buildinfo ../*.changes ../*.dsc ../*.tar.* ../*.deb artifacts/ 2>/dev/null || true
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.target }}-${{ matrix.qt-version }}
+        if-no-files-found: error
+        path: artifacts
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: '*'
+        path: artifacts
+        merge-multiple: true
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/*
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
