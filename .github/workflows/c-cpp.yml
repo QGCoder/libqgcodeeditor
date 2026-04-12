@@ -8,13 +8,18 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.target }}
+    name: ${{ matrix.target }}-${{ matrix.qt-version }}
     strategy:
       fail-fast: false
       matrix:
         target:
           - ubuntu-latest
+        qt-version:
+          - qt5
+          - qt6
     runs-on: ${{ matrix.target }}
+    env:
+      qt6: ${{ matrix.qt-version == 'qt6' && 'yes' || 'no' }}
     steps:
     - uses: actions/checkout@v3
 
@@ -58,7 +63,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.target }}
+        name: ${{ matrix.target }}-${{ matrix.qt-version }}
         if-no-files-found: error
         path: |
           *.buildinfo
