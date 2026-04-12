@@ -48,14 +48,45 @@ Description: Qt5 G-Code editor library - development files
  This package contains the files needed to develop and compile programs
  using QGCodeEditor linked with Qt version 5.
 
+Package: libqgcodeeditor-qt6
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Suggests: libqgcodeeditor-doc
+Multi-Arch: same
+Description: G-Code text editor library based on Qt6 - runtime
+ libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the shared library needed to run programs using
+ QGCodeEditor. This package contains QGCodeEditor linked with Qt version 6.
+
+Package: libqgcodeeditor-qt6-dev
+Section: libdevel
+Architecture: any
+Depends: libqgcodeeditor-qt6 (= ${binary:Version}),
+         qtbase6-dev,
+         ${misc:Depends}
+Description: Qt6 G-Code editor library - development files
+ libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
+ that enables the quick creation of G-Code editing apps. It features
+ G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to
+ extend to create complex applications, with a possible G-Code editing GUI.
+ .
+ This package contains the files needed to develop and compile programs
+ using QGCodeEditor linked with Qt version 6.
+
 Package: libqgcodeeditor-doc
 Section: doc
 Architecture: all
 Multi-Arch: foreign
 Depends: libjs-jquery,
          ${misc:Depends}
-X-Doc-Main-Package: libqgcodeeditor-qt5
-Description: G-Code text editor library based on Qt5 - documentation
+X-Doc-Main-Package: libqgcodeeditor-qt6
+Description: G-Code text editor library based on Qt6 - documentation
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features
  G-Code syntax highlighting. QGGCodeEditor is fully customizable and easy to

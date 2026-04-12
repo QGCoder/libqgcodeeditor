@@ -34,25 +34,26 @@ jobs:
         git fetch --unshallow
         git fetch --tags
         VERSION="$(git tag -l | tail -n1 | sed -e "s/^v//" -e "s/-/+git/")"
-        dch --create \
+        DEBEMAIL="${DEBEMAIL}" dch --create \
             --distribution ${TARGET} \
             --package libqgcodeeditor \
             --newversion ${VERSION}~${TARGET}1 \
             "Automatic build from Github"
         debuild -S -sa -us -uc -d
 
-    - name: Build deb packages
+    - name: Clean and rebuild packages
       run: |
+        rm -rf QGcodeQt5 QGcodeQt6 configure-stamp build-library-stamp debian/tmp debian/libqgcodeeditor-qt* debian/*.debhelper.log debian/*.substvars
         dpkg-buildpackage -b -rfakeroot -us -uc
 
-    - name: Install deb packages
+    - name: Install packages
       run: |
-        sudo dpkg -i ../libqgcodeeditor*deb
+        sudo dpkg -i ../libqgcodeeditor-qt5_amd64.deb ../libqgcodeeditor-qt6_amd64.deb ../libqgcodeeditor-qt5-dev_amd64.deb ../libqgcodeeditor-qt6-dev_amd64.deb
         sudo apt -y -f install
 
     - name: Run lintian
       run: |
-        lintian ../libqgcodeeditor*deb | lintian-info
+        lintian ../libqgcodeeditor*amd64.deb | lintian-info
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -65,8 +66,3 @@ jobs:
           *.dsc
           *.tar.*
           *.deb
-          ~/**/*/*.buildinfo
-          ~/**/*/*.changes
-          ~/**/*/*.dsc
-          ~/**/*/*.tar.*
-          ~/**/*/*.deb

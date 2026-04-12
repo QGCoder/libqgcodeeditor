@@ -1,1 +1,16 @@
-usr/lib/x86_64-linux-gnu/libqgcodeeditor_qt5.prl
+usr/lib/x86_64-linux-gnu/qt5/libqgcodeeditor_qt5.prl
+usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qgcodeeditor.prf
+usr/lib/x86_64-linux-gnu/qt5/libqgcodeeditor_qt5.so
+usr/lib/x86_64-linux-gnu/qt5/libqgcodeeditor_qt5.so.0
+usr/lib/x86_64-linux-gnu/qt5/libqgcodeeditor_qt5.so.0.0
+usr/lib/x86_64-linux-gnu/qt5/libqgcodeeditor_qt5.so.0.0.15
+usr/include/x86_64-linux-gnu/qt5/QGCodeEditor/QGCodeEditor.h
+usr/include/x86_64-linux-gnu/qt5/QGCodeEditor/QGCodeSyntaxHighlighter.h
+usr/lib/x86_64-linux-gnu/qt6/libqgcodeeditor_qt6.prl
+usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/qgcodeeditor.prf
+usr/lib/x86_64-linux-gnu/qt6/libqgcodeeditor_qt6.so
+usr/lib/x86_64-linux-gnu/qt6/libqgcodeeditor_qt6.so.0
+usr/lib/x86_64-linux-gnu/qt6/libqgcodeeditor_qt6.so.0.0
+usr/lib/x86_64-linux-gnu/qt6/libqgcodeeditor_qt6.so.0.0.15
+usr/include/x86_64-linux-gnu/qt6/QGCodeEditor/QGCodeEditor.h
+usr/include/x86_64-linux-gnu/qt6/QGCodeEditor/QGCodeSyntaxHighlighter.h
