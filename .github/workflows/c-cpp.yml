@@ -53,12 +53,12 @@ jobs:
 
     - name: Install packages
       run: |
-        sudo dpkg -i ../libqgcodeeditor-qt5_amd64.deb ../libqgcodeeditor-qt6_amd64.deb ../libqgcodeeditor-qt5-dev_amd64.deb ../libqgcodeeditor-qt6-dev_amd64.deb
+        sudo dpkg -i ../libqgcodeeditor-*.deb
         sudo apt -y -f install
 
     - name: Run lintian
       run: |
-        lintian ../libqgcodeeditor*amd64.deb | lintian-info
+        lintian ../libqgcodeeditor*.deb | lintian-info
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
