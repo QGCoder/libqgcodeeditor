@@ -382,6 +382,18 @@ int QGCodeEditor::getLineCount()
  * @brief Updates the line number area width
  * @param newBlockCount Number of blocks (unused, kept for signature compatibility)
  */
+int QGCodeEditor::lineNumberAreaWidth()
+{
+    int digits = 1;
+    int max = qMax(1, document()->blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
+    int space = 10 + fontMetrics().width(QLatin1Char('9')) * digits;
+    return space;
+}
+
 void QGCodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
