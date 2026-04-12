@@ -8,18 +8,13 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.target }}-${{ matrix.qt-version }}
+    name: ${{ matrix.target }}
     strategy:
       fail-fast: false
       matrix:
         target:
           - ubuntu-latest
-        qt-version:
-          - qt5
-          - qt6
     runs-on: ${{ matrix.target }}
-    env:
-      qt6: ${{ matrix.qt-version == 'qt6' && 'yes' || 'no' }}
     steps:
     - uses: actions/checkout@v3
 
