@@ -1,4 +1,4 @@
-A [Qt5 designer widget plugin](https://doc.qt.io/qt-5/designer-creating-custom-widgets.html) for syntax highlighting and editing [G-code](https://en.wikipedia.org/wiki/G-code):
+A [Qt5 / Qt6 designer widget plugin](https://doc.qt.io/qt-5/designer-creating-custom-widgets.html) for syntax highlighting and editing [G-code](https://en.wikipedia.org/wiki/G-code):
 
 <img src="https://raw.githubusercontent.com/QGCoder/libqgcodeeditor/main/doc/libqgcodeeditor-designer-widget.png"/>
 
