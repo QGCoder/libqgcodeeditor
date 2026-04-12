@@ -56,13 +56,12 @@ jobs:
         lintian ../libqgcodeeditor*.deb | lintian-info
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      run: |
+        mkdir -p artifacts
+        cp ../*.buildinfo ../*.changes ../*.dsc ../*.tar.* ../*.deb artifacts/ 2>/dev/null || true
+
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.target }}-${{ matrix.qt-version }}
         if-no-files-found: error
-        path: |
-          ../*.buildinfo
-          ../*.changes
-          ../*.dsc
-          ../*.tar.*
-          ../*.deb
+        path: artifacts
