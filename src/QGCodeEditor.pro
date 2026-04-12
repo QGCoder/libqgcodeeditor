@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 } else {
      TARGET = qgcodeeditor_qt5
 }
-VERSION  = 0.1.18
+VERSION  = 0.1.19
 
 QT      *= gui widgets
 
