@@ -8,16 +8,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QGCodeEditor
 
-CONFIG(debug, debug|release) {
-    mac: {
-        LIBS += -lQGCodeEditor_debug
-    } else {
-        win32: {
-            LIBS += -lQGCodeEditor
-        } else {
-            LIBS += $$[QT_INSTALL_LIBS]/libQGCodeEditor.so.0
-        }
-    }
+greaterThan(QT_MAJOR_VERSION, 5) {
+    LIBS += -lqgcodeeditor_qt6
 } else {
-    LIBS *= $$[QT_INSTALL_LIBS]/libQGCodeEditor.so.0
+    LIBS += -lqgcodeeditor_qt5
 }
