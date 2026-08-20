@@ -1,4 +1,6 @@
 .qmake.cache
+.qtcreator/
+build/
 QGCodeEditor/.moc
 QGCodeEditor/.obj
 QGCodeEditor/Makefile

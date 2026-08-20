@@ -7,117 +7,64 @@ export DH_VERBOSE=1
 
 include /usr/share/dpkg/default.mk
 
-QMAKE_FLAGS = QMAKE_CXXFLAGS+="$(CXXFLAGS) $(CPPFLAGS)" QMAKE_LFLAGS+="$(LDFLAGS)" QMAKE_STRIP=
+BUILDDIR_QT5 = build-qt5
+BUILDDIR_QT6 = build-qt6
 
-# Update this on SO name bumps so files get shoved around correctly
-SONAME=15
-
-# Designer plugin directories
-DESIGNER_QT5=QGcodeEditorDesignerQt5
-DESIGNER_QT6=QGcodeEditorDesignerQt6
+CMAKEFLAGS = -DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_INSTALL_LIBDIR=lib/$(DEB_HOST_MULTIARCH) \
+	-DCMAKE_CXX_FLAGS="$(CXXFLAGS) $(CPPFLAGS)" \
+	-DCMAKE_EXE_LINKER_FLAGS="$(LDFLAGS)" \
+	-DCMAKE_SHARED_LINKER_FLAGS="$(LDFLAGS)" \
+	-DCMAKE_SKIP_RPATH=TRUE \
+	-DBUILD_EXAMPLES=ON \
+	-DBUILD_DESIGNER_PLUGIN=ON
 
 %:
 	dh $@
 
-# Use dh_clean but preserve the build directories
-override_dh_clean:
-	dh_clean
-	rm -f configure-stamp build-library-stamp build-examples-stamp
+override_dh_auto_configure:
+	dh_auto_configure --builddirectory=$(BUILDDIR_QT5) -- $(CMAKEFLAGS) \
+		-DQT_VERSION_MAJOR=5 \
+		-DQGCODEEDITOR_INSTALL_INCLUDEDIR=include/$(DEB_HOST_MULTIARCH)/qt5/QGCodeEditor
+	dh_auto_configure --builddirectory=$(BUILDDIR_QT6) -- $(CMAKEFLAGS) \
+		-DQT_VERSION_MAJOR=6 \
+		-DQGCODEEDITOR_INSTALL_INCLUDEDIR=include/$(DEB_HOST_MULTIARCH)/qt6/QGCodeEditor
 
-configure-stamp:
-	dh_testdir
-	mkdir -p QGcodeQt5
-	cp -r src/* QGcodeQt5
-	cd QGcodeQt5 && /usr/bin/qmake -qt=5 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
-	mkdir -p QGcodeQt6
-	cp -r src/* QGcodeQt6
-	cd QGcodeQt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
-	rm -f QGcodeQt6/libqgcodeeditor_qt5.so* QGcodeQt6/libQGCodeEditor.prf QGcodeQt6/libQGCodeEditor.prl
-	mkdir -p $(DESIGNER_QT5)
-	cp -r designer/* $(DESIGNER_QT5)
-	cd $(DESIGNER_QT5) && /usr/bin/qmake -qt=5 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
-	mkdir -p $(DESIGNER_QT6)
-	cp -r designer/* $(DESIGNER_QT6)
-	cd $(DESIGNER_QT6) && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD $(QMAKE_FLAGS)
-	touch $@
-
-override_dh_auto_configure: configure-stamp
-
-build-library-stamp: configure-stamp
-	dh_testdir
-	cd QGcodeQt5 && $(MAKE)
-	@echo "Built Qt5"
-	cd QGcodeQt6 && $(MAKE)
-	@echo "Built Qt6"
-	cd $(DESIGNER_QT5) && $(MAKE)
-	@echo "Built Qt5 Designer"
-	cd $(DESIGNER_QT6) && $(MAKE)
-	@echo "Built Qt6 Designer"
-	touch $@
+override_dh_auto_build:
+	dh_auto_build --builddirectory=$(BUILDDIR_QT5)
+	dh_auto_build --builddirectory=$(BUILDDIR_QT6)
 
 execute_after_dh_auto_build-indep:
 	cd doc && doxygen qgcodeeditor.dxy
 
-build-examples-stamp: build-library-stamp
-	dh_testdir
-	for e in simple pipe contextMenu; do \
-		if [ -f examples/$$e/$$e.pro ]; then \
-			mkdir -p examples/QGcode$${e}Qt5; \
-			cp -r src/* examples/QGcode$${e}Qt5; \
-			mkdir -p examples/QGcode$${e}Qt5/QGCodeEditor; \
-			mv examples/QGcode$${e}Qt5/*.h examples/QGcode$${e}Qt5/QGCodeEditor/; \
-			cp -r examples/$$e/* examples/QGcode$${e}Qt5; \
-			cd examples/QGcode$${e}Qt5 && /usr/bin/qmake -qt=5 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt5 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt5 -lqgcodeeditor_qt5" INCLUDEPATH+="-I$(CURDIR)/QGcodeQt5" $(QMAKE_FLAGS); \
-			$(MAKE); \
-			cd ../..; \
-		fi; \
-		mkdir -p examples/QGcode$${e}Qt6; \
-		cp -r src/* examples/QGcode$${e}Qt6; \
-		mkdir -p examples/QGcode$${e}Qt6/QGCodeEditor; \
-		mv examples/QGcode$${e}Qt6/*.h examples/QGcode$${e}Qt6/QGCodeEditor/; \
-		cp -r examples/$$e/* examples/QGcode$${e}Qt6; \
-		cd examples/QGcode$${e}Qt6 && /usr/lib/qt6/bin/qmake6 -spec linux-g++ QT_QMAKE_VERSION=6 $${e}.pro PREFIX=/usr INCLUDE_DIR=/usr/include/$${DEB_HOST_MULTIARCH}/qt6 LIB_DIR=/usr/lib/$${DEB_HOST_MULTIARCH} DESTDIR=$$PWD LIBS+="-L$(CURDIR)/QGcodeQt6 -lqgcodeeditor_qt6" INCLUDEPATH+="-I$(CURDIR)/QGcodeQt6" $(QMAKE_FLAGS); \
-		$(MAKE); \
-		cd ../..; \
-	done
-	touch build-examples-stamp
-
-override_dh_auto_build: build-library-stamp build-examples-stamp
-
 override_dh_auto_install:
-	$(MAKE) -C QGcodeQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
-	$(MAKE) -C QGcodeQt6 install INSTALL_ROOT=$(CURDIR)/debian/tmp
-	install -m0755 -d debian/libqgcodeeditor-qt5/usr/lib/$${DEB_HOST_MULTIARCH}
-	cp -a debian/tmp/usr/lib/$${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt5.so* debian/libqgcodeeditor-qt5/usr/lib/$${DEB_HOST_MULTIARCH}/
-	install -m0755 -d debian/libqgcodeeditor-qt6/usr/lib/$${DEB_HOST_MULTIARCH}
-	cp -a debian/tmp/usr/lib/$${DEB_HOST_MULTIARCH}/libqgcodeeditor_qt6.so* debian/libqgcodeeditor-qt6/usr/lib/$${DEB_HOST_MULTIARCH}/
-	install -m0755 -d debian/libqgcodeeditor-qt5-dev/usr/lib/$${DEB_HOST_MULTIARCH}/qt5
-	install -m0755 -d debian/libqgcodeeditor-qt5-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt5/QGCodeEditor
-	cp -a debian/tmp/usr/include/$${DEB_HOST_MULTIARCH}/qt5/QGCodeEditor/* debian/libqgcodeeditor-qt5-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt5/QGCodeEditor/
-	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/lib/$${DEB_HOST_MULTIARCH}/qt6
-	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor
-	cp -a debian/tmp/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/* debian/libqgcodeeditor-qt6-dev/usr/include/$${DEB_HOST_MULTIARCH}/qt6/QGCodeEditor/
-	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/share/doc/libqgcodeeditor-qt5-examples
-	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/share/doc/libqgcodeeditor-qt6-examples
-	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5
-	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6
-	cp -a $(CURDIR)/examples/QGcodesimpleQt5/simple debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
-	cp -a $(CURDIR)/examples/QGcodepipeQt5/pipe debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
-	cp -a $(CURDIR)/examples/QGcodecontextMenuQt5/contextMenu debian/libqgcodeeditor-qt5-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt5/
-	cp -a $(CURDIR)/examples/QGcodesimpleQt6/simple debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
-	cp -a $(CURDIR)/examples/QGcodepipeQt6/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
-	cp -a $(CURDIR)/examples/QGcodecontextMenuQt6/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/$${DEB_HOST_MULTIARCH}/qgcodeeditor-examples/qt6/
-	install -m0755 -d debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer
-	cp -a $(DESIGNER_QT5)/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt5-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt5/plugins/designer/
-	install -m0755 -d debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer
-	cp -a $(DESIGNER_QT6)/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer/
-	install -m0644 $(DESIGNER_QT6)/QGCodeEditorPlugin.json debian/libqgcodeeditor-qt6-designer/usr/lib/$${DEB_HOST_MULTIARCH}/qt6/plugins/designer/
-
-execute_after_dh_auto_install:
-	install -m0755 -d debian/libqgcodeeditor-qt5/usr/lib/$${DEB_HOST_MULTIARCH}
-	install -m0755 -d debian/libqgcodeeditor-qt6/usr/lib/$${DEB_HOST_MULTIARCH}
-
-execute_after_dh_installdocs-indep:
+	$(MAKE) -C $(BUILDDIR_QT5) install DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C $(BUILDDIR_QT6) install DESTDIR=$(CURDIR)/debian/tmp
+	install -m0755 -d debian/libqgcodeeditor-qt5/usr/lib/$(DEB_HOST_MULTIARCH)
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libqgcodeeditor_qt5.so.* debian/libqgcodeeditor-qt5/usr/lib/$(DEB_HOST_MULTIARCH)/
+	install -m0755 -d debian/libqgcodeeditor-qt6/usr/lib/$(DEB_HOST_MULTIARCH)
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libqgcodeeditor_qt6.so.* debian/libqgcodeeditor-qt6/usr/lib/$(DEB_HOST_MULTIARCH)/
+	install -m0755 -d debian/libqgcodeeditor-qt5-dev/usr/lib/$(DEB_HOST_MULTIARCH)
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libqgcodeeditor_qt5.so debian/libqgcodeeditor-qt5-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/lib/$(DEB_HOST_MULTIARCH)
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libqgcodeeditor_qt6.so debian/libqgcodeeditor-qt6-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	install -m0755 -d debian/libqgcodeeditor-qt5-dev/usr/include/$(DEB_HOST_MULTIARCH)/qt5/QGCodeEditor
+	cp -a debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/qt5/QGCodeEditor/* debian/libqgcodeeditor-qt5-dev/usr/include/$(DEB_HOST_MULTIARCH)/qt5/QGCodeEditor/
+	install -m0755 -d debian/libqgcodeeditor-qt6-dev/usr/include/$(DEB_HOST_MULTIARCH)/qt6/QGCodeEditor
+	cp -a debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/qt6/QGCodeEditor/* debian/libqgcodeeditor-qt6-dev/usr/include/$(DEB_HOST_MULTIARCH)/qt6/QGCodeEditor/
+	install -m0755 -d debian/libqgcodeeditor-qt5-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt5
+	cp -a $(BUILDDIR_QT5)/simple debian/libqgcodeeditor-qt5-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt5/
+	cp -a $(BUILDDIR_QT5)/pipe debian/libqgcodeeditor-qt5-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt5/
+	cp -a $(BUILDDIR_QT5)/contextMenu debian/libqgcodeeditor-qt5-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt5/
+	install -m0755 -d debian/libqgcodeeditor-qt6-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt6
+	cp -a $(BUILDDIR_QT6)/simple debian/libqgcodeeditor-qt6-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt6/
+	cp -a $(BUILDDIR_QT6)/pipe debian/libqgcodeeditor-qt6-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt6/
+	cp -a $(BUILDDIR_QT6)/contextMenu debian/libqgcodeeditor-qt6-examples/usr/lib/$(DEB_HOST_MULTIARCH)/qgcodeeditor-examples/qt6/
+	install -m0755 -d debian/libqgcodeeditor-qt5-designer/usr/lib/$(DEB_HOST_MULTIARCH)/qt5/plugins/designer
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/qt5/plugins/designer/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt5-designer/usr/lib/$(DEB_HOST_MULTIARCH)/qt5/plugins/designer/
+	install -m0755 -d debian/libqgcodeeditor-qt6-designer/usr/lib/$(DEB_HOST_MULTIARCH)/qt6/plugins/designer
+	cp -a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/qt6/plugins/designer/libqgcodeeditorplugin.so debian/libqgcodeeditor-qt6-designer/usr/lib/$(DEB_HOST_MULTIARCH)/qt6/plugins/designer/
 
 override_dh_makeshlibs:
 	dh_makeshlibs --add-udeb shlibs:Depends
@@ -126,8 +73,13 @@ override_dh_makeshlibs:
 
 override_dh_installdeb:
 	dh_installdeb
-	rm -f debian/libqgcodeeditor-qt5/DEBIAN/triggers
-	rm -f debian/libqgcodeeditor-qt6/DEBIAN/triggers
 
 override_dh_strip:
 	dh_strip --remaining-packages
+
+override_dh_auto_clean:
+	:
+
+override_dh_clean:
+	rm -rf $(BUILDDIR_QT5) $(BUILDDIR_QT6)
+	dh_clean

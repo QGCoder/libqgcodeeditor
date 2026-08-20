@@ -1,7 +1,8 @@
 Source: libqgcodeeditor
 Priority: optional
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
-Build-Depends: debhelper-compat (= 13),
+Build-Depends: cmake,
+               debhelper-compat (= 13),
                qtbase5-dev,
                qtbase5-dev-tools,
                libqt5designer5,
@@ -81,9 +82,10 @@ Description: Qt6 G-Code editor library - development files
 
 Package: libqgcodeeditor-qt5-examples
 Section: examples
-Architecture: all
+Architecture: any
 Depends: libqgcodeeditor-qt5,
-         ${misc:Depends}
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: Qt5 G-Code editor library - example applications
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features
@@ -94,9 +96,10 @@ Description: Qt5 G-Code editor library - example applications
 
 Package: libqgcodeeditor-qt6-examples
 Section: examples
-Architecture: all
+Architecture: any
 Depends: libqgcodeeditor-qt6,
-         ${misc:Depends}
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: Qt6 G-Code editor library - example applications
  libqgcodeeditor (also known as QGGCodeEditor) is a free C++ library based on Qt
  that enables the quick creation of G-Code editing apps. It features
