@@ -195,7 +195,6 @@ void QGCodeEditor::clear()
 QString QGCodeEditor::formatLine(QString text)
 {
 QString str, str2;
-QStringList list;
     // get rid of extra spaces, convert to UC and make 2 copies
     str = text;
     str = str.simplified();
@@ -206,17 +205,26 @@ QStringList list;
     if(str2.startsWith('(') || str2.startsWith(';') )
         return str2;
 
-    if(str2.contains('(') )
+    // Cut the line at whichever comment opens first and keep everything from
+    // there on. This used to split on the delimiter and take only the piece
+    // after the first one, which threw the rest of the line away:
+    //
+    //   G0 (a) (b) (c)             lost "(b) (c)"
+    //   G1 X1 ;why; not            lost " not"
+    //
+    // Testing for '(' before ';' also cut a ';' comment that happened to
+    // contain a '(' in the wrong place, so take the earlier of the two.
+    qsizetype cut = str2.indexOf('(');
+    const qsizetype semi = str2.indexOf(';');
+    if(cut < 0 || (semi >= 0 && semi < cut) )
+        cut = semi;
+
+    if(cut >= 0)
         {
-        list = str2.split("(");
-        str = list[0];
-        str2 = " (" + list[1];
-        }
-    else if(str2.contains(';') )
-        {
-        list = str2.split(";", Qt::SkipEmptyParts);
-        str = list[0];
-        str2 = " ;" + list[1];
+        // Everything after the first comment goes with it, even where that is
+        // more code - "G1 X1 (a) Y2" wraps whole rather than losing the Y2.
+        str = str2.left(cut);
+        str2 = " " + str2.mid(cut);
         }
     else
         str2 = "";
