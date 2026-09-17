@@ -22,7 +22,7 @@
  * - X/Y/Z/A/B/C/U/V/W coordinates: Yellow
  * - I/J/K/R arcs: Dark Gray
  * - Parameters (#): Cyan
- * - Comments (; and ()): White/Magenta
+ * - Comments (; to end of line, and (...)): Magenta
  */
 
 /**
@@ -119,41 +119,84 @@ HighlightingRule rule;
     rule.format = Param_WordFormat;
     highlightingRules.append(rule);
 
-    // do comments last then won't get colouring of text containing M G F S T etc
-    semicolonCommentFormat.setForeground(Qt::white);
+    // Comments are not matched by regexp rules, they are located by
+    // findComments() in highlightBlock() so that a ';' really does comment out
+    // the rest of the line and a '(' inside such a comment stays comment text.
+    semicolonCommentFormat.setForeground(Qt::magenta);
     semicolonCommentFormat.setFontWeight(QFont::Bold);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression(";[^\\n]*");
-#else
-    rule.pattern = QRegExp(";[^\\n]*");
-#endif
-    rule.format = semicolonCommentFormat;
-    highlightingRules.append(rule);
 
     braceCommentFormat.setForeground(Qt::magenta);
     braceCommentFormat.setFontWeight(QFont::Bold);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("\\([^\\n]*");
-#else
-    rule.pattern = QRegExp("\\([^\\n]*");
-#endif
-    rule.format = braceCommentFormat;
-    highlightingRules.append(rule);
 }
+
+namespace
+{
+
+struct CommentSpan
+    {
+    // qsizetype, not int: that is what QString indexes and measures itself in
+    // under Qt 6, and narrowing it here warned on every build
+    qsizetype start;
+    qsizetype length;
+    bool semicolon;
+    };
+
+/**
+ * @brief Locates the comment regions of a single line of g-code
+ * @param text The line to scan
+ * @return The comments found, in the order they appear
+ *
+ * A ';' comments out everything up to the end of the line, a '(' opens a
+ * comment which is closed by the next ')' (or by the end of the line if the
+ * ')' is missing).  A ';' inside a '(...)' comment is ordinary comment text,
+ * as is a '(' following a ';'.
+ */
+QVector<CommentSpan> findComments(const QString &text)
+{
+QVector<CommentSpan> comments;
+
+    for (qsizetype i = 0; i < text.length(); ++i)
+        {
+        if (text.at(i) == QLatin1Char(';'))
+            {
+            comments.append({i, text.length() - i, true});
+            break;              // rest of the line is comment
+            }
+        if (text.at(i) == QLatin1Char('('))
+            {
+            const qsizetype close = text.indexOf(QLatin1Char(')'), i + 1);
+            const qsizetype last = (close < 0) ? text.length() - 1 : close;
+            comments.append({i, last - i + 1, false});
+            i = last;           // resume scanning after the closing brace
+            }
+        }
+    return comments;
+}
+
+}  // namespace
 
 /**
  * @brief Highlights a single block of text
  * @param text The text block to highlight
  *
- * Applies all matching highlighting rules to the given text block,
- * coloring G-code commands and comments appropriately.
+ * The comments are located first and blanked out of the text the word rules
+ * are matched against, so that g-code letters appearing inside a comment are
+ * not coloured as commands.  The comments themselves are coloured afterwards.
  */
 void QGCodeSyntaxHighlighter::highlightBlock(const QString &text)
 {
+const QVector<CommentSpan> comments = findComments(text);
+
+QString code(text);
+
+    // blank the comments out, the word patterns all stop at a space
+    for (const CommentSpan &comment : comments)
+        code.replace(comment.start, comment.length, QString(comment.length, QLatin1Char(' ')));
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     for (const HighlightingRule &rule : highlightingRules)
         {
-        QRegularExpressionMatchIterator it = rule.pattern.globalMatch(text);
+        QRegularExpressionMatchIterator it = rule.pattern.globalMatch(code);
         while (it.hasNext())
             {
             QRegularExpressionMatch match = it.next();
@@ -164,14 +207,19 @@ void QGCodeSyntaxHighlighter::highlightBlock(const QString &text)
     foreach (const HighlightingRule &rule, highlightingRules)
         {
         QRegExp expression(rule.pattern);
-        int index = expression.indexIn(text);
+        int index = expression.indexIn(code);
         while (index >= 0)
             {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
-            index = expression.indexIn(text, index + length);
+            index = expression.indexIn(code, index + length);
             }
         }
 #endif
+
+    for (const CommentSpan &comment : comments)
+        setFormat(comment.start, comment.length,
+                  comment.semicolon ? semicolonCommentFormat : braceCommentFormat);
+
     setCurrentBlockState(0);
 }
