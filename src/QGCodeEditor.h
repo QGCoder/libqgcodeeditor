@@ -76,7 +76,7 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
-    bool bMoreBig, bBigFile;
+    bool bMoreBig, bBigFile, bLoadingChunk;
     int linesIn;
     QStringList *excess;
     QStringList *contents;

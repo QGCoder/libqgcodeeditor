@@ -92,6 +92,7 @@ QGCodeEditor::QGCodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     updateLineNumberAreaWidth(0);
 
     bMoreBig = bBigFile = false;
+    bLoadingChunk = false;
     linesIn = 0;
 
     /*
@@ -470,6 +471,16 @@ void QGCodeEditor::loadNextChunk()
 int x, y;
 QString str;
 
+    // appendPlainText() below moves the cursor, and cursorPositionChanged lands
+    // straight back here through highlightCurrentLine(). excess is not drained
+    // until the loop has finished, so bMoreBig is still set and the re-entry
+    // starts the same chunk again - once per line appended, until the stack
+    // runs out. Clicking in the editor after loading a file of more than
+    // CHUNK_SIZE lines was enough to do it.
+    if(bLoadingChunk)
+        return;
+    bLoadingChunk = true;
+
     if(bMoreBig)
         {
         y = excess->size();
@@ -479,8 +490,10 @@ QString str;
 
         for ( x = 0; x < y  ; x++)
             {
+            // already formatted on the way into excess by appendNewPlainText();
+            // formatLine() is not idempotent, so running it again here altered
+            // every line past the first CHUNK_SIZE of a file
             str = excess->at(x);
-            str = formatLine(str);
             contents->append(str);
             QPlainTextEdit::appendPlainText(str);
             }
@@ -494,6 +507,8 @@ QString str;
             bMoreBig = false;
 	}
         }
+
+    bLoadingChunk = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
