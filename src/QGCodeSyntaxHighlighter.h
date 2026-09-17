@@ -43,4 +43,6 @@ private:
     QTextCharFormat XYZ_WordFormat;
     QTextCharFormat IJKR_WordFormat;
     QTextCharFormat Param_WordFormat;
+    QTextCharFormat OWord_MarkerFormat;   ///< o<name> / oNNN
+    QTextCharFormat OWord_KeywordFormat;  ///< sub, call, while, if, ...
 };

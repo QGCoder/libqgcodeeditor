@@ -42,9 +42,9 @@ HighlightingRule rule;
     M_WordFormat.setForeground(Qt::red);
     M_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[mMtT][^\\x20]*");
+    rule.pattern = QRegularExpression("[mMtT][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[mMtT][^\\x20]*");
+    rule.pattern = QRegExp("[mMtT][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = M_WordFormat;
     highlightingRules.append(rule);
@@ -52,9 +52,9 @@ HighlightingRule rule;
     G_WordFormat.setForeground(Qt::green);
     G_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[gG][^\\x20]*");
+    rule.pattern = QRegularExpression("[gG][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[gG][^\\x20]*");
+    rule.pattern = QRegExp("[gG][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = G_WordFormat;
     highlightingRules.append(rule);
@@ -62,9 +62,9 @@ HighlightingRule rule;
     F_WordFormat.setForeground(Qt::yellow);
     F_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[fF][^\\x20 ]*");
+    rule.pattern = QRegularExpression("[fF][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[fF][^\\x20 ]*");
+    rule.pattern = QRegExp("[fF][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = F_WordFormat;
     highlightingRules.append(rule);
@@ -72,9 +72,9 @@ HighlightingRule rule;
     S_WordFormat.setForeground(Qt::magenta);
     S_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[sS][^\\x20 ]*");
+    rule.pattern = QRegularExpression("[sS][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[sS][^\\x20 ]*");
+    rule.pattern = QRegExp("[sS][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = S_WordFormat;
     highlightingRules.append(rule);
@@ -82,9 +82,9 @@ HighlightingRule rule;
     PQ_WordFormat.setForeground(Qt::green);
     PQ_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[pPqQ][^\\x20 ]*");
+    rule.pattern = QRegularExpression("[pPqQ][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[pPqQ][^\\x20 ]*");
+    rule.pattern = QRegExp("[pPqQ][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = PQ_WordFormat;
     highlightingRules.append(rule);
@@ -92,9 +92,9 @@ HighlightingRule rule;
     XYZ_WordFormat.setForeground(Qt::yellow);
     XYZ_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[xXyYzZaAbBcCuUvVwW][^\\x20 ]*");
+    rule.pattern = QRegularExpression("[xXyYzZaAbBcCuUvVwW][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[xXyYzZaAbBcCuUvVwW][^\\x20 ]*");
+    rule.pattern = QRegExp("[xXyYzZaAbBcCuUvVwW][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = XYZ_WordFormat;
     highlightingRules.append(rule);
@@ -102,9 +102,9 @@ HighlightingRule rule;
     IJKR_WordFormat.setForeground(Qt::darkGray);
     IJKR_WordFormat.setFontWeight(QFont::Bold);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    rule.pattern = QRegularExpression("[iIjJkKrR][^\\x20 ]*");
+    rule.pattern = QRegularExpression("[iIjJkKrR][-+0-9.#\\[][^\\x20 ]*");
 #else
-    rule.pattern = QRegExp("[iIjJkKrR][^\\x20 ]*");
+    rule.pattern = QRegExp("[iIjJkKrR][-+0-9.#\\[][^\\x20 ]*");
 #endif
     rule.format = IJKR_WordFormat;
     highlightingRules.append(rule);
@@ -117,6 +117,40 @@ HighlightingRule rule;
     rule.pattern = QRegExp("#[^\\x20 ]*");
 #endif
     rule.format = Param_WordFormat;
+    highlightingRules.append(rule);
+
+    // O-words: the flow control LinuxCNC added to RS274NGC. These go last so
+    // they win over the letter rules - "call" begins with a C and "repeat"
+    // with an R, and a subroutine name can contain anything.
+    //
+    // The marker is o<name> or a bare number, and the keyword that follows it
+    // says what the line does. Highlighting them apart from the g-code words
+    // is the point: a line of flow control is not a move.
+    OWord_MarkerFormat.setForeground(Qt::darkCyan);
+    OWord_MarkerFormat.setFontWeight(QFont::Bold);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    rule.pattern = QRegularExpression("[oO](?:<[^>]*>|[0-9]+)",
+                                      QRegularExpression::CaseInsensitiveOption);
+#else
+    rule.pattern = QRegExp("[oO](<[^>]*>|[0-9]+)");
+#endif
+    rule.format = OWord_MarkerFormat;
+    highlightingRules.append(rule);
+
+    OWord_KeywordFormat.setForeground(Qt::darkCyan);
+    OWord_KeywordFormat.setFontWeight(QFont::Bold);
+    OWord_KeywordFormat.setFontItalic(true);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    rule.pattern = QRegularExpression(
+        "\\b(?:sub|endsub|call|return|if|elseif|else|endif|do|while|endwhile|"
+        "repeat|endrepeat|break|continue)\\b",
+        QRegularExpression::CaseInsensitiveOption);
+#else
+    rule.pattern = QRegExp(
+        "\\b(sub|endsub|call|return|if|elseif|else|endif|do|while|endwhile|"
+        "repeat|endrepeat|break|continue)\\b", Qt::CaseInsensitive);
+#endif
+    rule.format = OWord_KeywordFormat;
     highlightingRules.append(rule);
 
     // Comments are not matched by regexp rules, they are located by
