@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(libqgcodeeditor
-    VERSION 0.1.23
+    VERSION 0.1.24
     DESCRIPTION "Qt 5 / Qt 6 G-code editor widget based on QPlainTextEdit"
     LANGUAGES CXX)
 
