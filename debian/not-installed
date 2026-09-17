@@ -1,9 +1,12 @@
+# The soname and the full version are globbed rather than spelled out: these
+# listed 0.1.23 explicitly, so the first version bump left
+# libqgcodeeditor_qt6.so.0.1.24 claimed by nothing and dh_missing aborted the
+# build. debian/rules copies these into the runtime and -dev packages with the
+# same glob, so there is nothing here to keep in step with the version.
 usr/lib/*/libqgcodeeditor_qt5.so
-usr/lib/*/libqgcodeeditor_qt5.so.0
-usr/lib/*/libqgcodeeditor_qt5.so.0.1.23
+usr/lib/*/libqgcodeeditor_qt5.so.*
 usr/lib/*/libqgcodeeditor_qt6.so
-usr/lib/*/libqgcodeeditor_qt6.so.0
-usr/lib/*/libqgcodeeditor_qt6.so.0.1.23
+usr/lib/*/libqgcodeeditor_qt6.so.*
 usr/include/*/qt5/QGCodeEditor/QGCodeEditor.h
 usr/include/*/qt5/QGCodeEditor/QGCodeSyntaxHighlighter.h
 usr/include/*/qt6/QGCodeEditor/QGCodeEditor.h
